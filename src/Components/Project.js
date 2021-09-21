@@ -48,7 +48,7 @@ const TimeStamp = styled.p`
 	color:  #5f5f5f;
 `
 
-export default function Project() {
+export default function Project({ name , id }) {
 	const [menuOpen, setMenuOpen] = useState(false);
 
 	return (

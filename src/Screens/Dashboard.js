@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import Container from '../Components/Container'
 import Project from '../Components/Project'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import AddProjectModal from '../Components/AddProjectModal'
 
 const Header = styled.div`
 	display: flex;
@@ -72,14 +75,12 @@ const Projects = styled.div`
 `
 
 export default function Dashboard() {
-	const projects = [
-		{ name: 'asd' },
-		{ name: 'sdfdsf'},
-
-	]
+	const projects = useSelector(state => state.project)
+	const [showAddProjectModal, setShowAddProjectModal] = useState(false)
 
 	return (
 		<Container>
+			{showAddProjectModal && <AddProjectModal close={() => setShowAddProjectModal(false)}/>}
 			<Header>
 				<HeaderText>
 					Dashboard
@@ -95,7 +96,7 @@ export default function Dashboard() {
 							}}
 						/>
 					</FilterBox>
-					<CreateButton>
+					<CreateButton onClick={() => setShowAddProjectModal(true)}>
 						Create
 					</CreateButton>
 				</HeaderActions>
