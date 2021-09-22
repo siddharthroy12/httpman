@@ -9,19 +9,19 @@ export const addProject = (name) => async (dispatch) => {
 	})
 }
 
-export const removeProject = (name) => async (dispatch) => {
+export const removeProject = (id) => async (dispatch) => {
 	dispatch({
 		type: REMOVE_PROJECT,
-		payload: name
+		payload: id
 	})
 }
 
-export const renameProject = (id, newName) => async (dispatch) => {
+export const renameProject = (id, name) => async (dispatch) => {
 	dispatch({
 		type: RENAME_PROJECT,
 		payload: {
 			id,
-			newName
+			name
 		}
 	})
 }

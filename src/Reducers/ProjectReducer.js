@@ -6,12 +6,13 @@ export const ProjectReducer = (state = {}, action) => {
 
 	switch (action.type) {
 		case ADD_PROJECT:
-			for (const key in stateCopy) {
+			Object.keys(stateCopy).map(key => {
 				if (key > id) {
 					id = key
 				}
-			}
-			stateCopy[id] = action.payload
+				return null
+			})
+			stateCopy[id+1] = action.payload
 			return stateCopy
 		case REMOVE_PROJECT:
 			delete stateCopy[action.payload]

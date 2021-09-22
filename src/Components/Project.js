@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { removeProject, renameProject } from '../Actions/ProjectActions'
 import styled from 'styled-components'
+import Modal from './Modal'
 
 const Container = styled.div`
 	padding: 1rem;
@@ -37,10 +40,33 @@ const MenuBtn = styled.button`
 const Menu = styled.div`
 	position: absolute;
 	border: ${(props) => props.theme.borderStyle};
-	padding: 1rem;
+	overflow: hidden;
 	background-color: #2A2A2A;
 	border-radius: 3px;
 	margin-top: 5rem;
+	width: 10rem;
+	left: -5px;
+	top: -50px;
+	padding: 0.2rem 0;
+`
+
+const MenuItem = styled.button`
+	border: none;
+	background-color: unset;
+	color: ${(props) => props.red ? '#F45866' : 'white'};
+	padding: 0.5rem 1rem;
+	width: 100%;
+	text-align: start;
+
+	:hover {
+		background-color: rgba(225,225,225, 0.1);
+	}
+`
+
+const MenuDivider = styled.hr`
+	border: none;
+	border-bottom: 1px solid #3e3e3e;
+	margin: 0.2rem 0;
 `
 
 const TimeStamp = styled.p`
@@ -50,20 +76,68 @@ const TimeStamp = styled.p`
 
 export default function Project({ name , id }) {
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
+	const [showRenameModal, setShowRenameModal] = useState(false)
+	const menuEl = useRef(null);
+	const dispatch = useDispatch()
+
+	const handleClickOutside = (event) => {
+		if (menuEl.current && !menuEl.current.contains(event.target)) {
+			setMenuOpen(false)
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('click', handleClickOutside, true);
+    return () => {
+        document.removeEventListener('click', handleClickOutside, true);
+    };
+	})
+
+	const onDeleteConfirm = (name_) => {
+		if (name_ === name) {
+			dispatch(removeProject(id))
+			setShowDeleteModal(false)
+		}
+	}
+
+	const onRename = (newName) => {
+		dispatch(renameProject(id, newName))
+		setShowRenameModal(false)
+	}
 
 	return (
 		<Container>
+			{showDeleteModal && (<>
+				<Modal
+					title="Enter Project name to confim delete"
+					buttonTitle="Confirm"
+					onDone={onDeleteConfirm}
+					onClose={() => setShowDeleteModal(false)}
+				/>
+			</>)}
+			{showRenameModal && (<>
+				<Modal
+					title="Rename Project"
+					buttonTitle="Rename"
+					onDone={onRename}
+					onClose={() => setShowRenameModal(false)}
+				/>
+			</>)}
 			<Section>
-				<p>Agrus</p>
+				<p>{ name }</p>
 				<MenuBtn onClick={() => setMenuOpen(prev => !prev)}>
 					<i
 						className="bi bi-three-dots-vertical"
 						style={{
-							color: 'rgb(121, 121, 121)'
+							color: 'rgb(225, 225, 225)'
 						}}
 					/>
-					{menuOpen && (<Menu>
-
+					{menuOpen && (<Menu ref={menuEl}>
+						<MenuItem>Duplicate</MenuItem>
+						<MenuItem onClick={() => setShowRenameModal(true)}>Rename</MenuItem>
+						<MenuDivider></MenuDivider>
+						<MenuItem red={true} onClick={() => setShowDeleteModal(true)}>Delete</MenuItem>
 					</Menu>)}
 				</MenuBtn>
 			</Section>

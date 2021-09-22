@@ -3,7 +3,9 @@ import Container from '../Components/Container'
 import Project from '../Components/Project'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import AddProjectModal from '../Components/AddProjectModal'
+import Modal from '../Components/Modal'
+import { useDispatch } from 'react-redux'
+import { addProject } from '../Actions/ProjectActions'
 
 const Header = styled.div`
 	display: flex;
@@ -60,7 +62,7 @@ const StatusBar = styled.div`
 	bottom: 0;
 	left: 0;
 	right: 0;
-	padding: 0.2rem 1rem;
+	padding: 0.5rem 1rem;
 	border-top: ${props => props.theme.borderStyle};
 	font-size: 0.9rem;
 `
@@ -74,13 +76,38 @@ const Projects = styled.div`
 	}
 `
 
+const Center = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+
+	border: ${props => props.theme.borderStyle};
+	border-radius: 3px;
+	background-color: #272727;
+	padding: 1rem;
+`
+
 export default function Dashboard() {
 	const projects = useSelector(state => state.project)
 	const [showAddProjectModal, setShowAddProjectModal] = useState(false)
+	const dispatch = useDispatch()
+
+	const onModalCreate = (name) => {
+		dispatch(addProject(name))
+		setShowAddProjectModal(false)
+	}
 
 	return (
 		<Container>
-			{showAddProjectModal && <AddProjectModal close={() => setShowAddProjectModal(false)}/>}
+			{showAddProjectModal && (
+				<Modal
+					title="Create New Project"
+					buttonTitle="Create"
+					onDone={onModalCreate}
+					onClose={() => setShowAddProjectModal(false)}
+				/>
+			)}
 			<Header>
 				<HeaderText>
 					Dashboard
@@ -102,9 +129,10 @@ export default function Dashboard() {
 				</HeaderActions>
 			</Header>
 			<Projects>
-				<Project />
-				<Project />
-				<Project />
+				{Object.keys(projects).map(id => <Project key={id} id={id} name={projects[id].name}/>)}
+				{Object.keys(projects).length === 0 &&  (<Center>
+					Start by creating a new project.
+				</Center>)}
 			</Projects>
 			<StatusBar>
 				0 Projects

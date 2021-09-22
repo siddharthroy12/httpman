@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react'
 import styled from "styled-components"
 
 const Container = styled.div`
@@ -75,13 +76,30 @@ const Bottom = styled.div`
 	border-top: ${(props) => props.theme.borderStyle};
 `
 
-export default function AddProjectModal({ close }) {
+export default function Modal({ title, buttonTitle, onDone, onClose }) {
+	const [nameInput, setNameInput] = useState('')
+	const boxEl = useRef(null)
+
+	const handleClickOutside = (event) => {
+		if (boxEl.current && !boxEl.current.contains(event.target)) {
+			onClose()
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('click', handleClickOutside, true);
+    return () => {
+        document.removeEventListener('click', handleClickOutside, true);
+    };
+	})
+
+
 	return (
 		<Container>
-			<Box>
+			<Box ref={boxEl}>
 				<Top>
-					<Title>Create New Project</Title>
-					<CloseButton onClick={close}>
+					<Title>{ title }</Title>
+					<CloseButton onClick={onClose}>
 						<i
 							className="bi bi-x-circle-fill"
 							style={{
@@ -91,11 +109,11 @@ export default function AddProjectModal({ close }) {
 					</CloseButton>
 				</Top>
 				<InputContainer>
-					<TextInput />
+					<TextInput onChange={(e) => setNameInput(e.target.value)}/>
 				</InputContainer>
 				<Bottom>
-					<CreateButton onClick={close}>
-						Create
+					<CreateButton onClick={() => onDone(nameInput)}>
+						{ buttonTitle }
 					</CreateButton>
 				</Bottom>
 			</Box>
