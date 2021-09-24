@@ -12,7 +12,7 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: flex-start;
 	padding-top: 5rem;
-
+	margin: 0;
 	z-index: 3;
 `
 
@@ -93,9 +93,14 @@ export default function Modal({ title, buttonTitle, onDone, onClose }) {
     };
 	})
 
+	const onClickDone = () => {
+		if (nameInput.trim() !== '') {
+			onDone(nameInput)
+		}
+	}
 
 	return (
-		<Container>
+		<Container onClick={(e) => e.preventDefault()}>
 			<Box ref={boxEl}>
 				<Top>
 					<Title>{ title }</Title>
@@ -112,7 +117,7 @@ export default function Modal({ title, buttonTitle, onDone, onClose }) {
 					<TextInput onChange={(e) => setNameInput(e.target.value)}/>
 				</InputContainer>
 				<Bottom>
-					<CreateButton onClick={() => onDone(nameInput)}>
+					<CreateButton onClick={onClickDone}>
 						{ buttonTitle }
 					</CreateButton>
 				</Bottom>

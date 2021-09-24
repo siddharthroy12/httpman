@@ -1,3 +1,7 @@
 export const ADD_PROJECT = 'ADD_PROJECT'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
 export const RENAME_PROJECT = 'RENAME_PROJECT'
+export const ADD_REQUEST = 'ADD_REQUEST'
+export const DELETE_REQUEST = 'DELETE_REQUEST'
+export const ADD_FOLDER = 'ADD_FOLDER'
+export const DELETE_FOLDER = 'DELETE_FOLDER'

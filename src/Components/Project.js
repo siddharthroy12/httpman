@@ -3,13 +3,16 @@ import { useDispatch } from 'react-redux'
 import { removeProject, renameProject } from '../Actions/ProjectActions'
 import styled from 'styled-components'
 import Modal from './Modal'
+import { Link } from 'react-router-dom'
 
-const Container = styled.div`
+const Container = styled(Link)`
 	padding: 1rem;
 	border-radius: 3px;
 	border: ${(props) => props.theme.borderStyle};
 	display: inline-block;
 	width: 10rem;
+	text-decoration: none;
+	color: white;
 
 	:hover {
 		border-color: #ACA0F2;
@@ -31,6 +34,7 @@ const MenuBtn = styled.button`
 	width: 1.3rem;
 	height: 1.3rem;
 	position: relative;
+	cursor: pointer;
 
 	:hover {
 		background-color: rgba(0,0,0, 0.1);
@@ -106,27 +110,27 @@ export default function Project({ name , id }) {
 		setShowRenameModal(false)
 	}
 
-	return (
-		<Container>
-			{showDeleteModal && (<>
-				<Modal
-					title="Enter Project name to confim delete"
-					buttonTitle="Confirm"
-					onDone={onDeleteConfirm}
-					onClose={() => setShowDeleteModal(false)}
-				/>
-			</>)}
-			{showRenameModal && (<>
-				<Modal
-					title="Rename Project"
-					buttonTitle="Rename"
-					onDone={onRename}
-					onClose={() => setShowRenameModal(false)}
-				/>
-			</>)}
+	return (<>
+		{showDeleteModal && (<>
+			<Modal
+				title={`Enter '${name}' to confim delete`}
+				buttonTitle="Confirm"
+				onDone={onDeleteConfirm}
+				onClose={() => setShowDeleteModal(false)}
+			/>
+		</>)}
+		{showRenameModal && (<>
+			<Modal
+				title="Rename Project"
+				buttonTitle="Rename"
+				onDone={onRename}
+				onClose={() => setShowRenameModal(false)}
+			/>
+		</>)}
+		<Container to={`/project/${id}`}>
 			<Section>
 				<p>{ name }</p>
-				<MenuBtn onClick={() => setMenuOpen(prev => !prev)}>
+				<MenuBtn onClick={(e) => { setMenuOpen(prev => !prev); e.preventDefault() }}>
 					<i
 						className="bi bi-three-dots-vertical"
 						style={{
@@ -157,5 +161,5 @@ export default function Project({ name , id }) {
 				</div>
 			</Section>
 		</Container>
-	)
+	</>)
 }
