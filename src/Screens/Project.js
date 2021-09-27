@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import Modal from '../Components/Modal'
+import RequestItem from '../Components/RequestItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { addRequest } from '../Actions/ProjectActions'
@@ -25,6 +26,10 @@ const Sidebar = styled.div`
 
 const SidebarTop = styled(Top)`
 	padding: 0.5rem;
+`
+
+const SidebarBottom = styled.div`
+	padding-top: 0.5rem;
 `
 
 const TextInput = styled.input`
@@ -84,13 +89,13 @@ const Center = styled.div`
 `
 
 const Result = styled.div`
-	width: 40rem;
+	width: 50rem;
 	height: 100%;
 `
 
 export default function Project() {
 	const { id } = useParams()
-	const projectState = useSelector(state => state[id])
+	const projectState = useSelector(state => state.project[id])
 	const dispatch = useDispatch()
 	const addButtonEl = useRef(null)
 	const [showAddButtonMenu, setShowAddButtonMenu] = useState(false)
@@ -165,7 +170,21 @@ export default function Project() {
 							</AddButtonMenu>
 						)}
 					</AddButton>
-				</SidebarTop>	
+				</SidebarTop>
+				<SidebarBottom>
+					{Object.keys(projectState.requests).map(index => {
+						const item = projectState.requests[index]
+
+						switch (item.type) {
+							case "REQUEST":
+								return <RequestItem key={index} id={id} requestId={index} />
+							default:
+								break
+						}
+						
+						return null
+					})}
+				</SidebarBottom>
 			</Sidebar>
 			<Center>
 				<Top>
