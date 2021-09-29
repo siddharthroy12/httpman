@@ -69,6 +69,7 @@ const DropdownMenu = styled.div`
 	top: 2rem;
 	padding: 1rem;
 	border: 1px solid red;
+	z-index: 2;
 `
 
 export default function RequestItem({ id, requestId }) {
