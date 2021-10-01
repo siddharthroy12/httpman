@@ -1,11 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { 
+	deleteRequest, renameRequest
+} from '../Actions/ProjectActions'
 import styled from 'styled-components'
 
 const Container = styled.div`
 	padding: 0.5rem 1rem;
 
 	transition-duration: 0ms !important;
+
+	${(props) => props.selected ? 'background-color: rgba(255,255,255, 0.1);' : null}
 
 	:hover {
 		background-color: rgba(255,255,255, 0.1);
@@ -100,10 +105,11 @@ const MenuItem = styled.button`
 	}
 `
 
-export default function RequestItem({ id, requestId }) {
+export default function RequestItem({ id, requestId, selected, onClick }) {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const menuEl = useRef(null);
 	const requestInfo = useSelector(state => state.project[id].requests[requestId])
+	const dispatch = useDispatch()
 
 	const handleClickOutside = (event) => {
 		if (menuEl.current && !menuEl.current.contains(event.target)) {
@@ -114,12 +120,12 @@ export default function RequestItem({ id, requestId }) {
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
     return () => {
-        document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
 	})
 
 	return (
-		<Container>
+		<Container onClick={onClick} selected={selected}>
 			<div>
 				<Method method={requestInfo.method}>{requestInfo.method}</Method>
 				<Name>{requestInfo.name}</Name>
@@ -132,6 +138,10 @@ export default function RequestItem({ id, requestId }) {
 			{menuOpen && (
 				<DropdownMenu ref={menuEl}>
 					<MenuItem>
+						<i class="bi bi-cursor-text"></i>
+						Rename
+					</MenuItem>
+					<MenuItem>
 						<i class="bi bi-files"></i>
 						Duplicate
 					</MenuItem>
@@ -140,7 +150,7 @@ export default function RequestItem({ id, requestId }) {
 						Pin
 					</MenuItem>
 					<MenuDivider />
-					<MenuItem red>
+					<MenuItem red onClick={() => dispatch(deleteRequest(id, requestId))}>
 						<i class="bi bi-file-earmark-x-fill"></i>
 						Delete
 					</MenuItem>

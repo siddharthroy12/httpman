@@ -1,6 +1,6 @@
 import { 
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
-	ADD_REQUEST, DELETE_REQUEST, ADD_FOLDER, DELETE_FOLDER
+	ADD_REQUEST, DELETE_REQUEST, ADD_FOLDER, DELETE_FOLDER, RENAME_REQUEST
 } from '../ActionTypes/ProjectActions'
 
 export const ProjectReducer = (state = {}, action) => {
@@ -40,7 +40,15 @@ export const ProjectReducer = (state = {}, action) => {
 				headers: [],
 			})
 			return stateCopy
-
+		
+		case DELETE_REQUEST:
+			stateCopy[action.payload.id].requests.splice(action.payload.requestId, 1)
+			return stateCopy
+		
+		case RENAME_REQUEST:
+			stateCopy[action.payload.id].requests[action.payload.requestId].name = action.payload.newName
+			return stateCopy
+		
 		default:
 			return state
 	}

@@ -66,6 +66,7 @@ const AddButtonMenu = styled.div`
 	left: 0px;
 	width: 10rem;
 	padding: 0.2rem 0;
+	z-index: 2;
 `
 
 const MenuItem = styled.button`
@@ -93,6 +94,61 @@ const Result = styled.div`
 	height: 100%;
 `
 
+const MethodBtn = styled.button`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: none;
+	background: unset;
+	color: ${(props) => {
+		switch (props.method) {
+			case 'GET':
+				return '#8E84CB'
+			case 'POST':
+				return '#80C860'
+			case 'PATCH':
+				return '#E29E34'
+			case 'DELETE':
+				return '#EA6758'
+			default:
+				return 'white'
+		}
+	}};
+
+	:hover {
+		background-color: rgba(225,225,225, 0.1);
+	}
+
+	padding: 0 1rem;
+
+	> i {
+		margin-left: 0.5rem;
+	}
+
+	font-size: 0.8rem;
+`
+
+const UrlInput = styled.input`
+	border: none;
+	background-color: unset;
+	color: white;
+	font-size: 0.8rem;
+	width: 100%;
+	padding: 0.5rem;
+`
+
+const SendRequestBtn = styled.button`
+	border: none;
+	background-color: unset;
+	color: white;
+	padding: 0 1rem;
+	font-size: 0.8rem;
+
+	:hover {
+		background-color: rgba(225,225,225, 0.1);
+	}
+`
+
 export default function Project() {
 	const { id } = useParams()
 	const projectState = useSelector(state => state.project[id])
@@ -100,6 +156,7 @@ export default function Project() {
 	const addButtonEl = useRef(null)
 	const [showAddButtonMenu, setShowAddButtonMenu] = useState(false)
 	const [showAddRequestModal, setShowAddRequestModal] = useState(false)
+	const [selectedItem, setSelectedItem] = useState(null)
 
 	const handleClickOutside = (event) => {
 		if (addButtonEl.current && !addButtonEl.current.contains(event.target)) {
@@ -117,6 +174,10 @@ export default function Project() {
 	const onAddRequestConfirm = (name) => {
 		dispatch(addRequest(id, name))
 		setShowAddRequestModal(false)
+	}
+
+	if (selectedItem !== null && projectState.requests[selectedItem] === undefined) {
+		setSelectedItem(null)
 	}
 
 	return (
@@ -177,18 +238,34 @@ export default function Project() {
 
 						switch (item.type) {
 							case "REQUEST":
-								return <RequestItem key={index} id={id} requestId={index} />
-							default:
+								return (
+									<RequestItem
+										key={index}
+										id={id}
+										requestId={index}
+										selected={index === selectedItem}
+										onClick={() => setSelectedItem(index)}
+									/>
+								)
+								default:
 								break
 						}
-						
 						return null
 					})}
 				</SidebarBottom>
 			</Sidebar>
 			<Center>
 				<Top>
-
+					{selectedItem && projectState.requests[selectedItem] !== undefined && (<>
+						<MethodBtn method={projectState.requests[selectedItem].method}>
+							{projectState.requests[selectedItem].method}
+							<i className="bi bi-caret-down-fill" />
+						</MethodBtn>
+						<UrlInput />
+						<SendRequestBtn>
+							Send
+						</SendRequestBtn>
+					</>)}
 				</Top>
 			</Center>
 			<Result>

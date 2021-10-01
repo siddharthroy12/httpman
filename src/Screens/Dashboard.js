@@ -129,8 +129,12 @@ export default function Dashboard() {
 				</HeaderActions>
 			</Header>
 			<Projects>
-				{Object.keys(projects).map(id => <Project key={id} id={id} name={projects[id].name}/>)}
-				{Object.keys(projects).length === 0 &&  (<Center>
+				{ Object.keys(projects).map(id => <Project
+					key={id}
+					id={id}
+					name={projects[id].name}
+				/>) }
+				{ Object.keys(projects).length === 0 &&  (<Center>
 					Start by creating a new project.
 				</Center>)}
 			</Projects>
