@@ -1,4 +1,4 @@
-import { ADD_PROJECT, ADD_REQUEST, DELETE_REQUEST, REMOVE_PROJECT, RENAME_PROJECT, RENAME_REQUEST } from '../ActionTypes/ProjectActions'
+import { ADD_PROJECT, ADD_REQUEST, DELETE_REQUEST, REMOVE_PROJECT, RENAME_PROJECT, RENAME_REQUEST, UPDATE_REQUEST } from '../ActionTypes/ProjectActions'
 
 export const addProject = (name) => async (dispatch) => {
 	dispatch({
@@ -31,6 +31,16 @@ export const addRequest = (id, name) => async (dispatch) => {
 		type: ADD_REQUEST,
 		payload: {
 			id, name
+		}
+	})
+}
+
+export const updateRequest = (id, requestId, url, method, query, headers) => async (dispatch) => {
+	dispatch({
+		type: UPDATE_REQUEST,
+		payload: {
+			id, requestId,
+			url, method, query, headers
 		}
 	})
 }

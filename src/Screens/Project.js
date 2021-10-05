@@ -14,6 +14,7 @@ const Container = styled.div`
 
 const Top = styled.div`
 	display: flex;
+	position: relative;
 	flex-direction: row;
 	height: 3rem;
 	border-bottom: ${(props) => props.theme.borderStyle};
@@ -77,6 +78,21 @@ const MenuItem = styled.button`
 	width: 100%;
 	text-align: start;
 
+	color: ${(props) => {
+		switch (props.method) {
+			case 'GET':
+				return '#8E84CB'
+			case 'POST':
+				return '#80C860'
+			case 'PATCH':
+				return '#E29E34'
+			case 'DELETE':
+				return '#EA6758'
+			default:
+				return 'white'
+		}
+	}};
+
 	:hover {
 		background-color: rgba(225,225,225, 0.1);
 	}
@@ -128,6 +144,18 @@ const MethodBtn = styled.button`
 	font-size: 0.8rem;
 `
 
+const MethodBtnMenu = styled.div`
+	position: absolute;
+	padding: 0.2rem 0;
+	border: 1px solid red;
+	width: 10rem;
+	border-radius: 3px;
+	top: 3.3rem;
+	left: 0.3rem;
+	background-color: #2A2A2A;
+	border: ${(props) => props.theme.borderStyle};
+`
+
 const UrlInput = styled.input`
 	border: none;
 	background-color: unset;
@@ -154,13 +182,18 @@ export default function Project() {
 	const projectState = useSelector(state => state.project[id])
 	const dispatch = useDispatch()
 	const addButtonEl = useRef(null)
+	const methodMenuEl = useRef(null)
 	const [showAddButtonMenu, setShowAddButtonMenu] = useState(false)
+	const [showMethodButtonMenu, setShowMethodButtonMenu] = useState(false)
 	const [showAddRequestModal, setShowAddRequestModal] = useState(false)
 	const [selectedItem, setSelectedItem] = useState(null)
 
 	const handleClickOutside = (event) => {
 		if (addButtonEl.current && !addButtonEl.current.contains(event.target)) {
 			setShowAddButtonMenu(false)
+		}
+		if (methodMenuEl.current && !methodMenuEl.current.contains(event.target)) {
+			setShowMethodButtonMenu(false)
 		}
 	};
 
@@ -257,10 +290,18 @@ export default function Project() {
 			<Center>
 				<Top>
 					{selectedItem && projectState.requests[selectedItem] !== undefined && (<>
-						<MethodBtn method={projectState.requests[selectedItem].method}>
+						<MethodBtn method={projectState.requests[selectedItem].method} onClick={() => setShowMethodButtonMenu(prev => !prev)}>
 							{projectState.requests[selectedItem].method}
 							<i className="bi bi-caret-down-fill" />
 						</MethodBtn>
+						{ showMethodButtonMenu && (<>
+							<MethodBtnMenu ref={methodMenuEl}>
+								<MenuItem method="GET">GET</MenuItem>
+								<MenuItem method="POST">POST</MenuItem>
+								<MenuItem method="PATCH">PATCH</MenuItem>
+								<MenuItem method="DELETE">DELETE</MenuItem>
+							</MethodBtnMenu>
+						</>)}
 						<UrlInput />
 						<SendRequestBtn>
 							Send

@@ -1,6 +1,7 @@
 import { 
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
-	ADD_REQUEST, DELETE_REQUEST, ADD_FOLDER, DELETE_FOLDER, RENAME_REQUEST
+	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST, ADD_FOLDER,
+	DELETE_FOLDER, RENAME_REQUEST,
 } from '../ActionTypes/ProjectActions'
 
 export const ProjectReducer = (state = {}, action) => {
@@ -41,6 +42,26 @@ export const ProjectReducer = (state = {}, action) => {
 			})
 			return stateCopy
 		
+			case UPDATE_REQUEST:
+				stateCopy[action.payload.id]
+					.requests[action.payload.requestId]
+						.url = (action.payload.url !== null) || action.payload.url !== undefined ?
+							action.payload.url : stateCopy[action.payload.id].requests[action.payload.requestId].url
+				stateCopy[action.payload.id]
+					.requests[action.payload.requestId]
+						.method = (action.payload.method !== null) || action.payload.method !== undefined ?
+							action.payload.method : stateCopy[action.payload.id].requests[action.payload.requestId].method
+				stateCopy[action.payload.id]
+					.requests[action.payload.requestId]
+						.query = (action.payload.query !== null) || action.payload.query !== undefined ?
+							action.payload.query : stateCopy[action.payload.id].requests[action.payload.requestId].query
+				stateCopy[action.payload.id]
+					.requests[action.payload.requestId]
+						.headers = (action.payload.headers !== null) || action.payload.headers !== undefined ?
+							action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
+
+				return stateCopy;
+
 		case DELETE_REQUEST:
 			stateCopy[action.payload.id].requests.splice(action.payload.requestId, 1)
 			return stateCopy
