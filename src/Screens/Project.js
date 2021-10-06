@@ -70,6 +70,11 @@ const AddButtonMenu = styled.div`
 	z-index: 2;
 `
 
+const Divider = styled.hr`
+	border: ${(props) => props.theme.borderStyle};
+	margin: 0.5rem 0;
+`
+
 const MenuItem = styled.button`
 	border: none;
 	background-color: unset;
@@ -200,7 +205,7 @@ export default function Project() {
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
     return () => {
-        document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
 	})
 
@@ -266,6 +271,24 @@ export default function Project() {
 					</AddButton>
 				</SidebarTop>
 				<SidebarBottom>
+				{Object.keys(projectState.requests).map(index => {
+						const item = projectState.requests[index]
+						
+						if (item.type === "REQUEST" && item.pinned) {
+							return (
+								<RequestItem
+									key={index}
+									id={id}
+									requestId={index}
+									selected={false}
+									onClick={() => setSelectedItem(index)}
+								/>
+							)
+						} else {
+							return null
+						}
+					})}
+					{projectState.requests.filter((item) => item.pinned).length > 0 && (<Divider />)}
 					{Object.keys(projectState.requests).map(index => {
 						const item = projectState.requests[index]
 

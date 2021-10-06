@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { 
-	deleteRequest, renameRequest
+	deleteRequest, renameRequest, pinRequest
 } from '../Actions/ProjectActions'
 import styled from 'styled-components'
+import Modal from './Modal'
+
 
 const Container = styled.div`
 	padding: 0.5rem 1rem;
@@ -18,6 +20,10 @@ const Container = styled.div`
 
 		> button {
 			display: block;
+		}
+
+		> p {
+			display: none;
 		}
 	}
 
@@ -68,6 +74,15 @@ const DropdownBtn = styled.button`
 	}
 `
 
+const PinnedIcon = styled.p`
+	color: #B6B6B6;
+	font-size: 0.9rem;
+
+	:hover {
+		display: none;
+	}
+`
+
 const DropdownMenu = styled.div`
 	position: absolute;
 	right: -10px;
@@ -109,6 +124,7 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const menuEl = useRef(null);
 	const requestInfo = useSelector(state => state.project[id].requests[requestId])
+	const [showRenameItemModal, setShowRenameItemModal] = useState(false)
 	const dispatch = useDispatch()
 
 	const handleClickOutside = (event) => {
@@ -124,12 +140,30 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
     };
 	})
 
+	const onModalRename = (newname) => {
+		dispatch(renameRequest(id, requestId, newname))
+		setShowRenameItemModal(false)
+	}
+
 	return (
 		<Container onClick={onClick} selected={selected}>
+			{showRenameItemModal && (
+				<Modal
+					title="Rename Request"
+					buttonTitle="Rename"
+					onDone={onModalRename}
+					onClose={() => setShowRenameItemModal(false)}
+				/>
+			)}
 			<div>
 				<Method method={requestInfo.method}>{requestInfo.method}</Method>
 				<Name>{requestInfo.name}</Name>
 			</div>
+			{requestInfo.pinned && (<PinnedIcon>
+				<i
+					className="bi bi-pin-fill"
+				/>
+			</PinnedIcon>)}
 			<DropdownBtn onClick={() => setMenuOpen(prev => !prev)}>
 				<i
 					className="bi bi-caret-down-fill"
@@ -137,7 +171,7 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 			</DropdownBtn>
 			{menuOpen && (
 				<DropdownMenu ref={menuEl}>
-					<MenuItem>
+					<MenuItem onClick={() => setShowRenameItemModal(true)}>
 						<i class="bi bi-cursor-text"></i>
 						Rename
 					</MenuItem>
@@ -145,7 +179,7 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 						<i class="bi bi-files"></i>
 						Duplicate
 					</MenuItem>
-					<MenuItem>
+					<MenuItem onClick={() => { dispatch(pinRequest(id, requestId)); setMenuOpen(false) }}>
 						<i class="bi bi-pin-angle"></i>
 						Pin
 					</MenuItem>

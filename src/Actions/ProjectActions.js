@@ -1,4 +1,9 @@
-import { ADD_PROJECT, ADD_REQUEST, DELETE_REQUEST, REMOVE_PROJECT, RENAME_PROJECT, RENAME_REQUEST, UPDATE_REQUEST } from '../ActionTypes/ProjectActions'
+import { 
+	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
+	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST,
+	DUPLICATE_REQUEST, PIN_REQUEST, RENAME_REQUEST,
+	ADD_FOLDER, DELETE_FOLDER,
+} from '../ActionTypes/ProjectActions'
 
 export const addProject = (name) => async (dispatch) => {
 	dispatch({
@@ -62,6 +67,15 @@ export const renameRequest = (id, requestId, newName) => async (dispatch) => {
 			id,
 			requestId,
 			newName
+		}
+	})
+}
+
+export const pinRequest = (id, requestId) => async (dispatch) => {
+	dispatch({
+		type: PIN_REQUEST,
+		payload: {
+			id, requestId
 		}
 	})
 }

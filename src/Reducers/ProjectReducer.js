@@ -1,7 +1,8 @@
 import { 
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
-	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST, ADD_FOLDER,
-	DELETE_FOLDER, RENAME_REQUEST,
+	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST,
+	DUPLICATE_REQUEST, PIN_REQUEST, RENAME_REQUEST,
+	ADD_FOLDER, DELETE_FOLDER,
 } from '../ActionTypes/ProjectActions'
 
 export const ProjectReducer = (state = {}, action) => {
@@ -38,29 +39,30 @@ export const ProjectReducer = (state = {}, action) => {
 				url: '',
 				bodyType: 'NULL',
 				query: [],
+				pinned: false,
 				headers: [],
 			})
 			return stateCopy
 		
-			case UPDATE_REQUEST:
-				stateCopy[action.payload.id]
-					.requests[action.payload.requestId]
-						.url = (action.payload.url !== null) || action.payload.url !== undefined ?
-							action.payload.url : stateCopy[action.payload.id].requests[action.payload.requestId].url
-				stateCopy[action.payload.id]
-					.requests[action.payload.requestId]
-						.method = (action.payload.method !== null) || action.payload.method !== undefined ?
-							action.payload.method : stateCopy[action.payload.id].requests[action.payload.requestId].method
-				stateCopy[action.payload.id]
-					.requests[action.payload.requestId]
-						.query = (action.payload.query !== null) || action.payload.query !== undefined ?
-							action.payload.query : stateCopy[action.payload.id].requests[action.payload.requestId].query
-				stateCopy[action.payload.id]
-					.requests[action.payload.requestId]
-						.headers = (action.payload.headers !== null) || action.payload.headers !== undefined ?
-							action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
+		case UPDATE_REQUEST:
+			stateCopy[action.payload.id]
+				.requests[action.payload.requestId]
+					.url = (action.payload.url !== null) || action.payload.url !== undefined ?
+						action.payload.url : stateCopy[action.payload.id].requests[action.payload.requestId].url
+			stateCopy[action.payload.id]
+				.requests[action.payload.requestId]
+					.method = (action.payload.method !== null) || action.payload.method !== undefined ?
+						action.payload.method : stateCopy[action.payload.id].requests[action.payload.requestId].method
+			stateCopy[action.payload.id]
+				.requests[action.payload.requestId]
+					.query = (action.payload.query !== null) || action.payload.query !== undefined ?
+						action.payload.query : stateCopy[action.payload.id].requests[action.payload.requestId].query
+			stateCopy[action.payload.id]
+				.requests[action.payload.requestId]
+					.headers = (action.payload.headers !== null) || action.payload.headers !== undefined ?
+						action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
 
-				return stateCopy;
+			return stateCopy;
 
 		case DELETE_REQUEST:
 			stateCopy[action.payload.id].requests.splice(action.payload.requestId, 1)
@@ -68,6 +70,10 @@ export const ProjectReducer = (state = {}, action) => {
 		
 		case RENAME_REQUEST:
 			stateCopy[action.payload.id].requests[action.payload.requestId].name = action.payload.newName
+			return stateCopy
+		
+		case PIN_REQUEST:
+			stateCopy[action.payload.id].requests[action.payload.requestId].pinned = !stateCopy[action.payload.id].requests[action.payload.requestId].pinned
 			return stateCopy
 		
 		default:
