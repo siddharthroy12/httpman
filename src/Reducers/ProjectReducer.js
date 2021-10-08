@@ -38,6 +38,7 @@ export const ProjectReducer = (state = {}, action) => {
 				method: 'GET',
 				url: '',
 				bodyType: 'NULL',
+				body: null,
 				query: [],
 				pinned: false,
 				headers: [],
@@ -47,20 +48,28 @@ export const ProjectReducer = (state = {}, action) => {
 		case UPDATE_REQUEST:
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
-					.url = (action.payload.url !== null) || action.payload.url !== undefined ?
+					.url = ((action.payload.url !== null) && action.payload.url !== undefined) ?
 						action.payload.url : stateCopy[action.payload.id].requests[action.payload.requestId].url
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
-					.method = (action.payload.method !== null) || action.payload.method !== undefined ?
+					.method = ((action.payload.method !== null) && action.payload.method !== undefined) ?
 						action.payload.method : stateCopy[action.payload.id].requests[action.payload.requestId].method
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
-					.query = (action.payload.query !== null) || action.payload.query !== undefined ?
+					.query = ((action.payload.query !== null) && action.payload.query !== undefined) ?
 						action.payload.query : stateCopy[action.payload.id].requests[action.payload.requestId].query
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
-					.headers = (action.payload.headers !== null) || action.payload.headers !== undefined ?
+					.headers = ((action.payload.headers !== null) && action.payload.headers !== undefined) ?
 						action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
+			stateCopy[action.payload.id]
+			.requests[action.payload.requestId]
+				.bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ?
+					action.payload.bodyType : stateCopy[action.payload.id].requests[action.payload.requestId].bodyType
+			stateCopy[action.payload.id]
+			.requests[action.payload.requestId]
+				.body = ((action.payload.body !== null) && action.payload.body !== undefined) ?
+					action.payload.body : stateCopy[action.payload.id].requests[action.payload.requestId].body
 
 			return stateCopy;
 

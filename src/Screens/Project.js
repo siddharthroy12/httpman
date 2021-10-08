@@ -2,9 +2,10 @@ import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import Modal from '../Components/Modal'
 import RequestItem from '../Components/RequestItem'
+import BodyInput from '../Components/BodyInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import { addRequest } from '../Actions/ProjectActions'
+import { addRequest, updateRequest } from '../Actions/ProjectActions'
 
 const Container = styled.div`
 	height: calc(100vh - 3.5rem);
@@ -165,7 +166,7 @@ const UrlInput = styled.input`
 	border: none;
 	background-color: unset;
 	color: white;
-	font-size: 0.8rem;
+	font-size: 0.9rem;
 	width: 100%;
 	padding: 0.5rem;
 `
@@ -319,22 +320,30 @@ export default function Project() {
 						</MethodBtn>
 						{ showMethodButtonMenu && (<>
 							<MethodBtnMenu ref={methodMenuEl}>
-								<MenuItem method="GET">GET</MenuItem>
-								<MenuItem method="POST">POST</MenuItem>
-								<MenuItem method="PATCH">PATCH</MenuItem>
-								<MenuItem method="DELETE">DELETE</MenuItem>
+								<MenuItem method="GET" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'GET')) }>GET</MenuItem>
+								<MenuItem method="POST" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'POST')) }>POST</MenuItem>
+								<MenuItem method="PATCH" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'PATCH')) }>PATCH</MenuItem>
+								<MenuItem method="DELETE" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'DELETE')) }>DELETE</MenuItem>
 							</MethodBtnMenu>
 						</>)}
-						<UrlInput />
+						<UrlInput
+							placeholder="https://localhost:400/api/login"
+							value={projectState.requests[selectedItem].url}
+							onChange={(event) => dispatch(updateRequest(id, selectedItem, event.target.value))}
+						/>
 						<SendRequestBtn>
 							Send
 						</SendRequestBtn>
 					</>)}
 				</Top>
+				<div>
+					{selectedItem && projectState.requests[selectedItem] !== undefined && (<>
+						<BodyInput />
+					</>)}
+				</div>
 			</Center>
 			<Result>
 				<Top>
-
 				</Top>
 			</Result>
 		</Container>

@@ -6,7 +6,6 @@ import {
 import styled from 'styled-components'
 import Modal from './Modal'
 
-
 const Container = styled.div`
 	padding: 0.5rem 1rem;
 
@@ -181,7 +180,7 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 					</MenuItem>
 					<MenuItem onClick={() => { dispatch(pinRequest(id, requestId)); setMenuOpen(false) }}>
 						<i class="bi bi-pin-angle"></i>
-						Pin
+						{requestInfo.pinned ? 'Unpin' : 'Pin'}
 					</MenuItem>
 					<MenuDivider />
 					<MenuItem red onClick={() => dispatch(deleteRequest(id, requestId))}>
