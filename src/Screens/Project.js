@@ -6,6 +6,7 @@ import BodyInput from '../Components/BodyInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { addRequest, updateRequest } from '../Actions/ProjectActions'
+import searchString from '../Utils/searchString'
 
 const Container = styled.div`
 	height: calc(100vh - 3.5rem);
@@ -193,6 +194,7 @@ export default function Project() {
 	const [showMethodButtonMenu, setShowMethodButtonMenu] = useState(false)
 	const [showAddRequestModal, setShowAddRequestModal] = useState(false)
 	const [selectedItem, setSelectedItem] = useState(null)
+	const [filter, setFilter] = useState('')
 
 	const handleClickOutside = (event) => {
 		if (addButtonEl.current && !addButtonEl.current.contains(event.target)) {
@@ -231,7 +233,7 @@ export default function Project() {
 			)}
 			<Sidebar>
 				<SidebarTop>
-					<TextInput placeholder="Filter"/>
+					<TextInput placeholder="Filter" value={filter} onChange={(e) => setFilter(e.target.value)}/>
 					<AddButton onClick={() => setShowAddButtonMenu(prev => !prev)} ref={addButtonEl}>
 						<i
 							className="bi bi-caret-down-fill"
@@ -292,6 +294,12 @@ export default function Project() {
 					{projectState.requests.filter((item) => item.pinned).length > 0 && (<Divider />)}
 					{Object.keys(projectState.requests).map(index => {
 						const item = projectState.requests[index]
+
+						if (filter.trim() !== '') {
+							if (!searchString(filter, item.name)) {
+								return null
+							}
+						}
 
 						switch (item.type) {
 							case "REQUEST":

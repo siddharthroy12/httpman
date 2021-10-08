@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import Modal from '../Components/Modal'
 import { useDispatch } from 'react-redux'
 import { addProject } from '../Actions/ProjectActions'
+import searchString from '../Utils/searchString'
 
 const Header = styled.div`
 	display: flex;
@@ -90,6 +91,7 @@ const Center = styled.div`
 
 export default function Dashboard() {
 	const projects = useSelector(state => state.project)
+	const [filter, setFilter] = useState('')
 	const [showAddProjectModal, setShowAddProjectModal] = useState(false)
 	const dispatch = useDispatch()
 
@@ -114,7 +116,7 @@ export default function Dashboard() {
 				</HeaderText>
 				<HeaderActions>
 					<FilterBox>
-						<FilterInput type="text" placeholder="Filter"/>
+						<FilterInput type="text" placeholder="Filter" value={filter} onChange={(e) => setFilter(e.target.value)}/>
 						<i
 							className="bi bi-search"
 							style={{
@@ -129,11 +131,21 @@ export default function Dashboard() {
 				</HeaderActions>
 			</Header>
 			<Projects>
-				{ Object.keys(projects).map(id => <Project
-					key={id}
-					id={id}
-					name={projects[id].name}
-				/>) }
+				{ Object.keys(projects).map(id => {
+					if (filter.trim() !== '') {
+						if (!searchString(filter, projects[id].name)) {
+							return null
+						}
+					}
+
+					return (
+						<Project
+							key={id}
+							id={id}
+							name={projects[id].name}
+						/>
+					)
+				})}
 				{ Object.keys(projects).length === 0 &&  (<Center>
 					Start by creating a new project.
 				</Center>)}
