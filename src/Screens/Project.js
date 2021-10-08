@@ -320,10 +320,10 @@ export default function Project() {
 						</MethodBtn>
 						{ showMethodButtonMenu && (<>
 							<MethodBtnMenu ref={methodMenuEl}>
-								<MenuItem method="GET" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'GET')) }>GET</MenuItem>
-								<MenuItem method="POST" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'POST')) }>POST</MenuItem>
-								<MenuItem method="PATCH" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'PATCH')) }>PATCH</MenuItem>
-								<MenuItem method="DELETE" onClick={() => dispatch(updateRequest(id, selectedItem, null, 'DELETE')) }>DELETE</MenuItem>
+								<MenuItem method="GET" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'GET')); setShowMethodButtonMenu(false) } }>GET</MenuItem>
+								<MenuItem method="POST" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'POST')); setShowMethodButtonMenu(false) } }>POST</MenuItem>
+								<MenuItem method="PATCH" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'PATCH')); setShowMethodButtonMenu(false) } }>PATCH</MenuItem>
+								<MenuItem method="DELETE" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'DELETE')); setShowMethodButtonMenu(false) } }>DELETE</MenuItem>
 							</MethodBtnMenu>
 						</>)}
 						<UrlInput

@@ -19,7 +19,7 @@ export default function Header() {
 	return (
 		<Wrapper>
 			<Container>
-				<HeaderText>Httpman</HeaderText>
+				<HeaderText>HTTPMAN</HeaderText>
 			</Container>
 		</Wrapper>
 	)
