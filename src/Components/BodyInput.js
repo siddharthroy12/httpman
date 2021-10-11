@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/theme-monokai";
 import styled from 'styled-components'
 
 const TabContainer = styled.div`
@@ -25,6 +29,20 @@ const TabContainerSpace = styled.div`
 	border-bottom: ${(props) => props.theme.borderStyle};
 `
 
+const BottomContainer = styled.div`
+	height: calc(100vh - 9rem);
+
+	* {
+		transition-duration: 0s;
+	}
+`
+
+const Editor = styled(AceEditor)`
+	width: 100% !important;
+	height: 100% !important;
+	font-size: 1rem !important;
+`
+
 const Tabs = {
 	BODY: 1,
 	QUERY: 2,
@@ -33,6 +51,8 @@ const Tabs = {
 
 export default function BodyInput({id, requestId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
+	const [jsonBody, setJsonBody] = useState('')
+
 	return (
 		<div>
 			<TabContainer>
@@ -47,6 +67,23 @@ export default function BodyInput({id, requestId}) {
 				</Tab>
 				<TabContainerSpace />
 			</TabContainer>
+			<BottomContainer>
+				{ selectedTab === Tabs.BODY && (
+					<Editor
+						mode="json"
+						theme="monokai"
+						onChange={(value) => setJsonBody(value)}
+						value={jsonBody}
+				  	/>
+				)}
+				{ selectedTab === Tabs.QUERY && (
+					<p>query</p>
+				)}
+				{ selectedTab === Tabs.HEADER && (
+					<p>headers</p>
+				)}
+			</BottomContainer>
+			
 		</div>
 	)
 }

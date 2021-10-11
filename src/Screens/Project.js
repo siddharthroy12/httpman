@@ -161,6 +161,7 @@ const MethodBtnMenu = styled.div`
 	left: 0.3rem;
 	background-color: #2A2A2A;
 	border: ${(props) => props.theme.borderStyle};
+	z-index: 10;
 `
 
 const UrlInput = styled.input`
@@ -174,13 +175,13 @@ const UrlInput = styled.input`
 
 const SendRequestBtn = styled.button`
 	border: none;
-	background-color: unset;
+	background-color: #8E84CB;
 	color: white;
 	padding: 0 1rem;
 	font-size: 0.8rem;
 
 	:hover {
-		background-color: rgba(225,225,225, 0.1);
+		background-color: rgb(142, 132, 203, 0.8);
 	}
 `
 
