@@ -39,7 +39,7 @@ export const ProjectReducer = (state = {}, action) => {
 				url: '',
 				bodyType: 'NULL',
 				body: null,
-				query: [],
+				queries: [],
 				pinned: false,
 				headers: [],
 			})
@@ -56,8 +56,8 @@ export const ProjectReducer = (state = {}, action) => {
 						action.payload.method : stateCopy[action.payload.id].requests[action.payload.requestId].method
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
-					.query = ((action.payload.query !== null) && action.payload.query !== undefined) ?
-						action.payload.query : stateCopy[action.payload.id].requests[action.payload.requestId].query
+					.queries = ((action.payload.queries !== null) && action.payload.queries !== undefined) ?
+						action.payload.queries : stateCopy[action.payload.id].requests[action.payload.requestId].queries
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
 					.headers = ((action.payload.headers !== null) && action.payload.headers !== undefined) ?

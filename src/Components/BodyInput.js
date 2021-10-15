@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import AceEditor from "react-ace";
-
+import { useSelector, useDispatch } from 'react-redux'
+import { updateRequest } from '../Actions/ProjectActions'
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
 import styled from 'styled-components'
+import Button from './Button'
+import QueryInput from './QueryInput'
 
 const TabContainer = styled.div`
 	display: flex;
@@ -43,6 +46,33 @@ const Editor = styled(AceEditor)`
 	font-size: 1rem !important;
 `
 
+const QuerySection = styled.div`
+	padding: 1rem;
+	height: 100%;
+`
+
+const Label = styled.p`
+	font-size: 0.8rem;
+	color: gray;
+`
+
+const UrlPreview = styled.div`
+	border: ${(props) => props.theme.borderStyle};
+	padding: 1rem;
+	background-color: #282828;
+`
+
+const QueryList = styled.div`
+	height: calc(100% - 5rem);
+`
+
+const	QuerySectionBottom = styled.div`
+	height: 2rem;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+` 
+
 const Tabs = {
 	BODY: 1,
 	QUERY: 2,
@@ -52,7 +82,16 @@ const Tabs = {
 export default function BodyInput({id, requestId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
 	const [jsonBody, setJsonBody] = useState('')
+	const projectState = useSelector(state => state.project[id])
+	const dispatch = useDispatch()
+	
+	const addQuery = () => {
+		let updatedQueries = [...projectState.requests[requestId].queries]	
+		updatedQueries.push({ name: '', value: ''})
 
+		dispatch(updateRequest(id, requestId, null, null, updatedQueries)) 
+	}
+	
 	return (
 		<div>
 			<TabContainer>
@@ -77,7 +116,18 @@ export default function BodyInput({id, requestId}) {
 				  	/>
 				)}
 				{ selectedTab === Tabs.QUERY && (
-					<p>query</p>
+					<QuerySection>
+						<Label>URL PREVIEW</Label>
+						<UrlPreview></UrlPreview>
+						<QueryList>
+							{projectState.requests[requestId].queries.map((query, index) => {
+								return <QueryInput id={id} requestId={requestId} />	
+							})}
+						</QueryList>
+						<QuerySectionBottom>
+							<Button onClick={() => addQuery()}>Add</Button>
+						</QuerySectionBottom>
+					</QuerySection>
 				)}
 				{ selectedTab === Tabs.HEADER && (
 					<p>headers</p>

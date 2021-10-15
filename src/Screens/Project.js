@@ -347,7 +347,7 @@ export default function Project() {
 				</Top>
 				<div>
 					{selectedItem && projectState.requests[selectedItem] !== undefined && (<>
-						<BodyInput />
+						<BodyInput id={id} requestId={selectedItem} />
 					</>)}
 				</div>
 			</Center>
