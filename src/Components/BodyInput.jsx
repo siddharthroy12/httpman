@@ -60,13 +60,14 @@ const UrlPreview = styled.div`
 	border: ${(props) => props.theme.borderStyle};
 	padding: 1rem;
 	background-color: #282828;
+	margin-bottom: 0.5rem;
 `
 
 const QueryList = styled.div`
-	height: calc(100% - 5rem);
+	height: calc(100% - 6rem);
 `
 
-const	QuerySectionBottom = styled.div`
+const QuerySectionBottom = styled.div`
 	height: 2rem;
 	display: flex;
 	justify-content: flex-end;
@@ -77,6 +78,17 @@ const Tabs = {
 	BODY: 1,
 	QUERY: 2,
 	HEADER: 3
+}
+
+function generateQueryString(queries) {
+	let final = ''
+	let queriesFiltered = queries.filter(query => query.name.trim() !== '' && query.value.trim() !== '')
+
+	queriesFiltered.map((query, index) => {
+		final += (index !== 0 ? ';' : '') + query.name + '=' + encodeURIComponent(query.value) 
+	})
+
+	return final
 }
 
 export default function BodyInput({id, requestId}) {
@@ -118,10 +130,13 @@ export default function BodyInput({id, requestId}) {
 				{ selectedTab === Tabs.QUERY && (
 					<QuerySection>
 						<Label>URL PREVIEW</Label>
-						<UrlPreview></UrlPreview>
+						<UrlPreview>
+							{projectState.requests[requestId].url}?
+							{generateQueryString(projectState.requests[requestId].queries)}
+						</UrlPreview>
 						<QueryList>
-							{projectState.requests[requestId].queries.map((query, index) => {
-								return <QueryInput id={id} requestId={requestId} />	
+							{projectState.requests[requestId].queries.map((_, index) => {
+								return <QueryInput id={id} requestId={requestId} queryIndex={index} />	
 							})}
 						</QueryList>
 						<QuerySectionBottom>
