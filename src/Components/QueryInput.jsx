@@ -31,36 +31,47 @@ const DeleteBtn = styled.button`
 	padding: 0;
 `
 
-export default function QueryInput({id, requestId, queryIndex}) {
+export default function QueryInput({id, requestId, index, isQuery}) {
 	const dispatch = useDispatch()
 	const projectState = useSelector(state => state.project[id])
 	const queries = projectState.requests[requestId].queries
+	const headers = projectState.requests[requestId].headers
+	const name = isQuery ? queries[index].name : headers[index].name 
+	const value = isQuery ? queries[index].value : headers[index].value 
 
-	const updateQueryName = (event) => {
-		let queriesCopy = [...queries]
-		queriesCopy[queryIndex].name = event.target.value
-		
-		dispatch(updateRequest(id, requestId, null, null, queriesCopy))		
+	const updateName = (event) => {
+		let copy = isQuery ? [...queries] : [...headers]
+		copy[index].name = event.target.value
+	
+		if (isQuery) { 
+			dispatch(updateRequest(id, requestId, null, null, copy))		
+		} else {
+			dispatch(updateRequest(id, requestId, null, null, null, copy))
+		}
 	}
 
-	const updateQueryValue = (event) => {
-		let queriesCopy = [...queries]
-		queriesCopy[queryIndex].value = event.target.value
-
-		dispatch(updateRequest(id, requestId, null, null, queriesCopy))		
+	const updateValue = (event) => {
+		let copy = isQuery ? [...queries] : [...headers]
+		copy[index].value = event.target.value
+	
+		if (isQuery) { 
+			dispatch(updateRequest(id, requestId, null, null, copy))		
+		} else {
+			dispatch(updateRequest(id, requestId, null, null, null, copy))
+		}
 	}
 
 	const deleteQuery = () => {
 		let queriesCopy = [...queries]
-		queriesCopy = queriesCopy.filter((_, index) => index !== queryIndex)
+		queriesCopy = queriesCopy.filter((_, i) => i !== i)
 	
 		dispatch(updateRequest(id, requestId, null, null, queriesCopy))		
 	}
 
 	return (
 		<Container>
-			<Input type="text" placeholder="name" value={queries[queryIndex].name} onChange={updateQueryName} />
-			<Input type="text" placeholder="value" value={queries[queryIndex].value} onChange={updateQueryValue} />
+			<Input type="text" placeholder="name" value={name} onChange={updateName} />
+			<Input type="text" placeholder="value" value={value} onChange={updateValue} />
 			<DeleteBtn onClick={deleteQuery}>	
 				<i
 					className="bi bi-x-circle-fill"

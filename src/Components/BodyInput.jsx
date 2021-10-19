@@ -61,10 +61,17 @@ const UrlPreview = styled.div`
 	padding: 1rem;
 	background-color: #282828;
 	margin-bottom: 0.5rem;
+	overflow-x: scroll;
+	white-space: nowrap;
+	width: calc(100vw - 42rem);
 `
 
 const QueryList = styled.div`
-	height: calc(100% - 6rem);
+	height: calc(100% - 8rem);
+`
+
+const HeaderList = styled.div`
+	height: calc(100% - 2rem)
 `
 
 const QuerySectionBottom = styled.div`
@@ -72,7 +79,7 @@ const QuerySectionBottom = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-` 
+`
 
 const Tabs = {
 	BODY: 1,
@@ -86,6 +93,7 @@ function generateQueryString(queries) {
 
 	queriesFiltered.map((query, index) => {
 		final += (index !== 0 ? ';' : '') + query.name + '=' + encodeURIComponent(query.value) 
+		return null
 	})
 
 	return final
@@ -102,6 +110,13 @@ export default function BodyInput({id, requestId}) {
 		updatedQueries.push({ name: '', value: ''})
 
 		dispatch(updateRequest(id, requestId, null, null, updatedQueries)) 
+	}
+
+	const addHeader = () => {
+		let updatedHeaders = [...projectState.requests[requestId].headers]
+		updatedHeaders.push({ name: '', value: ''})
+
+		dispatch(updateRequest(id, requestId, null, null, null, updatedHeaders))
 	}
 	
 	return (
@@ -125,7 +140,7 @@ export default function BodyInput({id, requestId}) {
 						theme="monokai"
 						onChange={(value) => setJsonBody(value)}
 						value={jsonBody}
-				  	/>
+				  />
 				)}
 				{ selectedTab === Tabs.QUERY && (
 					<QuerySection>
@@ -136,7 +151,7 @@ export default function BodyInput({id, requestId}) {
 						</UrlPreview>
 						<QueryList>
 							{projectState.requests[requestId].queries.map((_, index) => {
-								return <QueryInput id={id} requestId={requestId} queryIndex={index} />	
+								return <QueryInput id={id} requestId={requestId} index={index} isQuery/>	
 							})}
 						</QueryList>
 						<QuerySectionBottom>
@@ -145,10 +160,18 @@ export default function BodyInput({id, requestId}) {
 					</QuerySection>
 				)}
 				{ selectedTab === Tabs.HEADER && (
-					<p>headers</p>
+					<QuerySection>
+						<HeaderList>
+							{projectState.requests[requestId].headers.map((_, index) => {
+								return <QueryInput id={id} requestId={requestId} index={index} />	
+							})}
+						</HeaderList>
+						<QuerySectionBottom>
+							<Button onClick={() => addHeader()}>Add</Button>
+						</QuerySectionBottom>
+					</QuerySection>
 				)}
 			</BottomContainer>
-			
 		</div>
 	)
 }
