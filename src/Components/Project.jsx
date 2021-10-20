@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { removeProject, renameProject } from '../Actions/ProjectActions'
+import { removeProject, renameProject, duplicateProject } from '../Actions/ProjectActions'
 import styled from 'styled-components'
 import Modal from './Modal'
 import { Link } from 'react-router-dom'
@@ -138,7 +138,7 @@ export default function Project({ name , id }) {
 						}}
 					/>
 					{menuOpen && (<Menu ref={menuEl}>
-						<MenuItem>Duplicate</MenuItem>
+						<MenuItem onClick={() => dispatch(duplicateProject(id))}>Duplicate</MenuItem>
 						<MenuItem onClick={() => setShowRenameModal(true)}>Rename</MenuItem>
 						<MenuDivider></MenuDivider>
 						<MenuItem red={true} onClick={() => setShowDeleteModal(true)}>Delete</MenuItem>

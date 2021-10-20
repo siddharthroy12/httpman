@@ -2,7 +2,7 @@ import {
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
 	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST,
 	DUPLICATE_REQUEST, PIN_REQUEST, RENAME_REQUEST,
-	ADD_FOLDER, DELETE_FOLDER,
+	ADD_FOLDER, DELETE_FOLDER, DUPLICATE_PROJECT
 } from '../ActionTypes/ProjectActions'
 
 export const addProject = (name) => async (dispatch) => {
@@ -27,6 +27,15 @@ export const renameProject = (id, name) => async (dispatch) => {
 		payload: {
 			id,
 			name
+		}
+	})
+}
+
+export const duplicateProject = (id, name) => async (dispatch) => {
+	dispatch({
+		type: DUPLICATE_PROJECT,
+		payload: {
+			id
 		}
 	})
 }
@@ -74,6 +83,15 @@ export const renameRequest = (id, requestId, newName) => async (dispatch) => {
 export const pinRequest = (id, requestId) => async (dispatch) => {
 	dispatch({
 		type: PIN_REQUEST,
+		payload: {
+			id, requestId
+		}
+	})
+}
+
+export const duplicateRequest = (id, requestId) => async (dispatch) => {
+	dispatch({
+		type: DUPLICATE_REQUEST,
 		payload: {
 			id, requestId
 		}

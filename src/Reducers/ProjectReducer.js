@@ -2,7 +2,7 @@ import {
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
 	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST,
 	DUPLICATE_REQUEST, PIN_REQUEST, RENAME_REQUEST,
-	ADD_FOLDER, DELETE_FOLDER,
+	ADD_FOLDER, DELETE_FOLDER, DUPLICATE_PROJECT
 } from '../ActionTypes/ProjectActions'
 
 export const ProjectReducer = (state = {}, action) => {
@@ -13,7 +13,7 @@ export const ProjectReducer = (state = {}, action) => {
 		case ADD_PROJECT:
 			Object.keys(stateCopy).map(key => {
 				if (key > id) {
-					id = key
+					id = Number(key)
 				}
 				return null
 			})
@@ -29,6 +29,18 @@ export const ProjectReducer = (state = {}, action) => {
 
 		case RENAME_PROJECT:
 			stateCopy[action.payload.id].name = action.payload.name
+			return stateCopy
+
+		case DUPLICATE_PROJECT:
+			Object.keys(stateCopy).map(key => {
+				if (key > id) {
+					id = Number(key)
+				}
+				return null
+			})
+
+			let projectCopy = { ...stateCopy[action.payload.id] }
+			stateCopy[id+1] = projectCopy
 			return stateCopy
 
 		case ADD_REQUEST:
@@ -85,6 +97,10 @@ export const ProjectReducer = (state = {}, action) => {
 			stateCopy[action.payload.id].requests[action.payload.requestId].pinned = !stateCopy[action.payload.id].requests[action.payload.requestId].pinned
 			return stateCopy
 		
+		case DUPLICATE_REQUEST:
+			let requestCopy = { ...stateCopy[action.payload.id].requests[action.payload.requestId] }
+			stateCopy[action.payload.id].requests.push(requestCopy)
+			return stateCopy	
 		default:
 			return state
 	}

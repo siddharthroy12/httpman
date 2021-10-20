@@ -62,7 +62,7 @@ const UrlPreview = styled.div`
 	padding: 1rem;
 	background-color: #282828;
 	margin-bottom: 0.5rem;
-	overflow-x: scroll;
+	overflow-x: auto;
 	white-space: nowrap;
 	width: calc(100vw - 42rem);
 `

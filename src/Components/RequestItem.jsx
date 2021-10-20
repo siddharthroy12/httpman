@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { 
-	deleteRequest, renameRequest, pinRequest
+	deleteRequest, renameRequest, pinRequest, duplicateRequest
 } from '../Actions/ProjectActions'
 import styled from 'styled-components'
 import Modal from './Modal'
@@ -88,7 +88,7 @@ const DropdownMenu = styled.div`
 	top: 2rem;
 	border: ${(props) => props.theme.borderStyle};
 	background-color: #2A2A2A;
-	z-index: 2;
+	z-index: 5;
 	padding: 0.2rem 0;
 	border-radius: 3px;
 	display: flex;
@@ -174,7 +174,7 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 						<i class="bi bi-cursor-text"></i>
 						Rename
 					</MenuItem>
-					<MenuItem>
+					<MenuItem onClick={() => { dispatch(duplicateRequest(id, requestId)); setMenuOpen(false) }}>
 						<i class="bi bi-files"></i>
 						Duplicate
 					</MenuItem>

@@ -69,7 +69,7 @@ const AddButtonMenu = styled.div`
 	left: 0px;
 	width: 10rem;
 	padding: 0.2rem 0;
-	z-index: 2;
+	z-index: 5;
 `
 
 const Divider = styled.hr`
