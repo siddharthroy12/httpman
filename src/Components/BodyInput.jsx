@@ -6,7 +6,7 @@ import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
 import styled from 'styled-components'
 import Button from './Button'
-import QueryInput from './QueryInput'
+import PairInput from './PairInput'
 
 const TabContainer = styled.div`
 	display: flex;
@@ -46,9 +46,10 @@ const Editor = styled(AceEditor)`
 	font-size: 1rem !important;
 `
 
-const QuerySection = styled.div`
+const TabSection = styled.div`
 	padding: 1rem;
 	height: 100%;
+	position: relative;
 `
 
 const Label = styled.p`
@@ -74,11 +75,15 @@ const HeaderList = styled.div`
 	height: calc(100% - 2rem)
 `
 
-const QuerySectionBottom = styled.div`
+const TabSectionBottom = styled.div`
 	height: 2rem;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	width: 100%;
 `
 
 const Tabs = {
@@ -143,7 +148,7 @@ export default function BodyInput({id, requestId}) {
 				  />
 				)}
 				{ selectedTab === Tabs.QUERY && (
-					<QuerySection>
+					<TabSection>
 						<Label>URL PREVIEW</Label>
 						<UrlPreview>
 							{projectState.requests[requestId].url}?
@@ -151,25 +156,25 @@ export default function BodyInput({id, requestId}) {
 						</UrlPreview>
 						<QueryList>
 							{projectState.requests[requestId].queries.map((_, index) => {
-								return <QueryInput id={id} requestId={requestId} index={index} isQuery/>	
+								return <PairInput id={id} requestId={requestId} index={index} isQuery/>	
 							})}
 						</QueryList>
-						<QuerySectionBottom>
+						<TabSectionBottom>
 							<Button onClick={() => addQuery()}>Add</Button>
-						</QuerySectionBottom>
-					</QuerySection>
+						</TabSectionBottom>
+					</TabSection>
 				)}
 				{ selectedTab === Tabs.HEADER && (
-					<QuerySection>
+					<TabSection>
 						<HeaderList>
 							{projectState.requests[requestId].headers.map((_, index) => {
-								return <QueryInput id={id} requestId={requestId} index={index} />	
+								return <PairInput id={id} requestId={requestId} index={index} />	
 							})}
 						</HeaderList>
-						<QuerySectionBottom>
+						<TabSectionBottom>
 							<Button onClick={() => addHeader()}>Add</Button>
-						</QuerySectionBottom>
-					</QuerySection>
+						</TabSectionBottom>
+					</TabSection>
 				)}
 			</BottomContainer>
 		</div>

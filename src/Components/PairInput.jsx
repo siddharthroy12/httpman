@@ -62,10 +62,15 @@ export default function QueryInput({id, requestId, index, isQuery}) {
 	}
 
 	const deleteQuery = () => {
-		let queriesCopy = [...queries]
-		queriesCopy = queriesCopy.filter((_, i) => i !== i)
+		let copy = isQuery ? [...queries] : [...headers]
+
+		copy = copy.filter((_, i) => i !== index)
 	
-		dispatch(updateRequest(id, requestId, null, null, queriesCopy))		
+		if (isQuery) { 
+			dispatch(updateRequest(id, requestId, null, null, copy))		
+		} else {
+			dispatch(updateRequest(id, requestId, null, null, null, copy))
+		}
 	}
 
 	return (

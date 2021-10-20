@@ -21,6 +21,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+a { 
+	text-decoration: none;
+}
+
 * {
   margin: 0;
   padding: 0;
