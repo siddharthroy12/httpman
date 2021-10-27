@@ -7,6 +7,7 @@ import "ace-builds/src-noconflict/theme-monokai";
 import styled from 'styled-components'
 import Button from './Button'
 import PairInput from './PairInput'
+import generateQueryString from '../Utils/generateQueryString';
 
 const TabContainer = styled.div`
 	display: flex;
@@ -92,18 +93,6 @@ const Tabs = {
 	HEADER: 3
 }
 
-function generateQueryString(queries) {
-	let final = ''
-	let queriesFiltered = queries.filter(query => query.name.trim() !== '' && query.value.trim() !== '')
-
-	queriesFiltered.map((query, index) => {
-		final += (index !== 0 ? ';' : '') + query.name + '=' + encodeURIComponent(query.value) 
-		return null
-	})
-
-	return final
-}
-
 export default function BodyInput({id, requestId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
 	const [jsonBody, setJsonBody] = useState('')
@@ -168,7 +157,7 @@ export default function BodyInput({id, requestId}) {
 					<TabSection>
 						<HeaderList>
 							{projectState.requests[requestId].headers.map((_, index) => {
-								return <PairInput id={id} requestId={requestId} index={index} />	
+								return <PairInput key={id} id={id} requestId={requestId} index={index} />	
 							})}
 						</HeaderList>
 						<TabSectionBottom>

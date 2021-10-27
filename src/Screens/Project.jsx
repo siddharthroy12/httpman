@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 import Modal from '../Components/Modal'
 import RequestItem from '../Components/RequestItem'
 import BodyInput from '../Components/BodyInput'
@@ -7,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { addRequest, updateRequest } from '../Actions/ProjectActions'
 import searchString from '../Utils/searchString'
+import generateQueryString from '../Utils/generateQueryString.js'
 
 const Container = styled.div`
 	height: calc(100vh - 3.5rem);
@@ -185,6 +187,26 @@ const SendRequestBtn = styled.button`
 	}
 `
 
+const StatusBlock = styled.p`
+	background-color: ${(props) => {
+		if (props.status < 200) { // 1xx status codes 
+			return 'white'	
+		} else if (props.status < 300) { // 2xx status codes
+			return '#50FA7B'
+		} else if (props.status < 400) { // 3xx status codes
+			return '#F1FA8C'
+		} else { // 4xx and 5xx status codes
+			return '#E06B74'
+		}
+	}};
+	color: black;
+	padding: 0.5rem 1rem;
+`
+
+function getFullUrl(request) {
+	return request.url + generateQueryString(request.queries)
+}
+
 export default function Project() {
 	const { id } = useParams()
 	const projectState = useSelector(state => state.project[id])
@@ -194,6 +216,7 @@ export default function Project() {
 	const [showAddButtonMenu, setShowAddButtonMenu] = useState(false)
 	const [showMethodButtonMenu, setShowMethodButtonMenu] = useState(false)
 	const [showAddRequestModal, setShowAddRequestModal] = useState(false)
+	const [response, setResponse] = useState(null)
 	const [selectedItem, setSelectedItem] = useState(null)
 	const [filter, setFilter] = useState('')
 
@@ -216,6 +239,31 @@ export default function Project() {
 	const onAddRequestConfirm = (name) => {
 		dispatch(addRequest(id, name))
 		setShowAddRequestModal(false)
+	}
+
+	const sendRequest = async () => {
+		let res
+		try {
+			switch(projectState.requests[selectedItem].method) {
+				case 'GET':
+					res =	await axios.get(getFullUrl(projectState.requests[selectedItem]))
+					setResponse(res)
+					break;
+				case 'POST':
+					break;
+				case 'PUT':
+					break;
+				case 'DELETE':
+					break;
+				default:
+					break;
+				}
+		} catch (error) {
+			if (error.response) {
+				setResponse(error.response)
+			}
+			console.log(error)
+		}
 	}
 
 	if (selectedItem !== null && projectState.requests[selectedItem] === undefined) {
@@ -340,7 +388,7 @@ export default function Project() {
 							value={projectState.requests[selectedItem].url}
 							onChange={(event) => dispatch(updateRequest(id, selectedItem, event.target.value))}
 						/>
-						<SendRequestBtn>
+						<SendRequestBtn onClick={sendRequest}>
 							Send
 						</SendRequestBtn>
 					</>)}
@@ -352,7 +400,10 @@ export default function Project() {
 				</div>
 			</Center>
 			<Result>
-				<Top>
+				<Top style={{padding: '0.5rem', alignItems: 'center'}}>
+						{response && (<>
+							<StatusBlock status={response.status}>{response && response.status}</StatusBlock>
+						</>)}
 				</Top>
 			</Result>
 		</Container>
