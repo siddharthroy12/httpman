@@ -13,10 +13,14 @@ const Container = styled(Link)`
 	width: 10rem;
 	text-decoration: none;
 	color: white;
+  min-height: 6rem;
+  height: min-content;
 
 	:hover {
 		border-color: #ACA0F2;
 	}
+
+  position: relative;
 `
 
 const Section = styled.div`
@@ -52,6 +56,7 @@ const Menu = styled.div`
 	left: -5px;
 	top: -50px;
 	padding: 0.2rem 0;
+  z-index: 4;
 `
 
 const MenuItem = styled.button`
@@ -128,8 +133,8 @@ export default function Project({ name , id }) {
 			/>
 		</>)}
 		<Container to={`/project/${id}`}>
-			<Section>
-				<p>{ name }</p>
+      <Section style={{marginBottom: '1rem', alignItems: 'flex-start'}}>
+        <p style={{wordWrap: 'anywhere'}}>{ name }</p>
 				<MenuBtn onClick={(e) => { setMenuOpen(prev => !prev); e.preventDefault() }}>
 					<i
 						className="bi bi-three-dots-vertical"
@@ -146,7 +151,7 @@ export default function Project({ name , id }) {
 				</MenuBtn>
 			</Section>
 			<br />
-			<Section>
+      <Section style={{position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem'}}>
 				<div style={{ display: 'flex'}}>
 					<i
 						className="bi bi-clock"

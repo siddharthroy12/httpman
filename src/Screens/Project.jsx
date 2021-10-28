@@ -4,6 +4,7 @@ import axios from 'axios'
 import Modal from '../Components/Modal'
 import RequestItem from '../Components/RequestItem'
 import BodyInput from '../Components/BodyInput'
+import Response from '../Components/Response.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { addRequest, updateRequest } from '../Actions/ProjectActions'
@@ -200,7 +201,7 @@ const StatusBlock = styled.p`
 		}
 	}};
 	color: black;
-	padding: 0.5rem 1rem;
+	padding: 0.4rem 0.5rem;
 `
 
 function getFullUrl(request) {
@@ -405,6 +406,11 @@ export default function Project() {
 							<StatusBlock status={response.status}>{response && response.status}</StatusBlock>
 						</>)}
 				</Top>
+        <div>
+            {response && (<>
+                <Response response={response} />
+            </>)}
+        </div>
 			</Result>
 		</Container>
 	)

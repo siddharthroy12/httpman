@@ -70,6 +70,7 @@ const StatusBar = styled.div`
 
 const Projects = styled.div`
 	margin-top: 1rem;
+  display: flex;
 
 	> * {
 		margin-right: 1rem;
