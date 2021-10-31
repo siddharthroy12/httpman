@@ -251,10 +251,16 @@ export default function Project() {
 					setResponse(res)
 					break;
 				case 'POST':
+          res = await axios.post(getFullUrl(projectState.requests[selectedItem]))
+          setResponse(res)
 					break;
 				case 'PUT':
+          res = await axios.put(getFullUrl(projectState.requests[selectedItem]))
+          setResponse(res)
 					break;
 				case 'DELETE':
+          res = await axios.delete(getFullUrl(projectState.requests[selectedItem]))
+          setResponse(res)
 					break;
 				default:
 					break;
