@@ -134,9 +134,9 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
+		return () => {
+			document.removeEventListener('click', handleClickOutside, true);
+		};
 	})
 
 	const onModalRename = (newname) => {

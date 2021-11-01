@@ -66,8 +66,8 @@ const StatusBar = styled.div`
 	padding: 0.5rem 1rem;
 	border-top: ${props => props.theme.borderStyle};
 	font-size: 0.9rem;
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 `
 
 const Projects = styled.div`

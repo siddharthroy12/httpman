@@ -90,9 +90,9 @@ export default function Modal({ title, buttonTitle, onDone, onClose }) {
 
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
-    return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-    };
+		return () => {
+			document.removeEventListener('click', handleClickOutside, true);
+		}
 	})
 
 	const onClickDone = () => {

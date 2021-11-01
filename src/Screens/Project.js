@@ -232,9 +232,9 @@ export default function Project() {
 
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
+		return () => {
+			document.removeEventListener('click', handleClickOutside, true);
+		};
 	})
 
 	const onAddRequestConfirm = (name) => {
@@ -251,16 +251,16 @@ export default function Project() {
 					setResponse(res)
 					break;
 				case 'POST':
-          res = await axios.post(getFullUrl(projectState.requests[selectedItem]))
-          setResponse(res)
+					res = await axios.post(getFullUrl(projectState.requests[selectedItem]))
+					setResponse(res)
 					break;
 				case 'PUT':
-          res = await axios.put(getFullUrl(projectState.requests[selectedItem]))
-          setResponse(res)
+					res = await axios.put(getFullUrl(projectState.requests[selectedItem]))
+					setResponse(res)
 					break;
 				case 'DELETE':
-          res = await axios.delete(getFullUrl(projectState.requests[selectedItem]))
-          setResponse(res)
+					res = await axios.delete(getFullUrl(projectState.requests[selectedItem]))
+					setResponse(res)
 					break;
 				default:
 					break;
@@ -408,15 +408,15 @@ export default function Project() {
 			</Center>
 			<Result>
 				<Top style={{padding: '0.5rem', alignItems: 'center'}}>
-						{response && (<>
-							<StatusBlock status={response.status}>{response && response.status}</StatusBlock>
-						</>)}
+					{response && (<>
+						<StatusBlock status={response.status}>{response && response.status}</StatusBlock>
+					</>)}
 				</Top>
-        <div>
-            {response && (<>
-                <Response response={response} />
-            </>)}
-        </div>
+				<div>
+					{response && (<>
+						<Response response={response} />
+				</>)}
+				</div>
 			</Result>
 		</Container>
 	)

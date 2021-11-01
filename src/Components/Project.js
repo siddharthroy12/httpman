@@ -84,38 +84,38 @@ const TimeStamp = styled.p`
 `
 
 function timeSince(date) {
-  var seconds = Math.floor((new Date() - date) / 1000);
+	var seconds = Math.floor((new Date() - date) / 1000);
 
-  var interval = seconds / 31536000;
+	var interval = seconds / 31536000;
 
-  if (interval > 1) {
-    return Math.floor(interval) + " years";
-  }
-  interval = seconds / 2592000;
-  if (interval > 1) {
-    return Math.floor(interval) + " months";
-  }
-  interval = seconds / 86400;
-  if (interval > 1) {
-    return Math.floor(interval) + " days";
-  }
-  interval = seconds / 3600;
-  if (interval > 1) {
-    return Math.floor(interval) + " hours";
-  }
-  interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
+	if (interval > 1) {
+		return Math.floor(interval) + " years";
+	}
+	interval = seconds / 2592000;
+	if (interval > 1) {
+		return Math.floor(interval) + " months";
+	}
+	interval = seconds / 86400;
+	if (interval > 1) {
+		return Math.floor(interval) + " days";
+	}
+	interval = seconds / 3600;
+	if (interval > 1) {
+		return Math.floor(interval) + " hours";
+	}
+	interval = seconds / 60;
+	if (interval > 1) {
+		return Math.floor(interval) + " minutes";
+	}
+	return Math.floor(seconds) + " seconds";
 }
 
 export default function Project({ name , id }) {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const [showRenameModal, setShowRenameModal] = useState(false)
-  const [lastTouched, setLastTouched] = useState("A long time ago")
-  const projectState = useSelector(state => state.project[id]) 
+	const [lastTouched, setLastTouched] = useState("A long time ago")
+	const projectState = useSelector(state => state.project[id])
 	const menuEl = useRef(null);
 	const dispatch = useDispatch()
 
@@ -127,9 +127,9 @@ export default function Project({ name , id }) {
 
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
-    return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-    };
+    		return () => {
+			document.removeEventListener('click', handleClickOutside, true);
+    	};
 	})
 
 	const onDeleteConfirm = (name_) => {
@@ -144,11 +144,11 @@ export default function Project({ name , id }) {
 		setShowRenameModal(false)
 	}
 
-  useEffect(() => {
-    const date = new Date(projectState.lastTouched * 1000)
+	useEffect(() => {
+		const date = new Date(projectState.lastTouched * 1000)
 
-    setLastTouched(timeSince(new Date(projectState.lastTouched)))
-  }, [projectState.lastTouched])
+		setLastTouched(timeSince(new Date(projectState.lastTouched)))
+	}, [projectState.lastTouched])
 
 
 	return (<>
@@ -169,8 +169,8 @@ export default function Project({ name , id }) {
 			/>
 		</>)}
 		<Container to={`/project/${id}`}>
-      <Section style={{marginBottom: '1rem', alignItems: 'flex-start'}}>
-        <p style={{wordWrap: 'anywhere'}}>{ name }</p>
+		<Section style={{marginBottom: '1rem', alignItems: 'flex-start'}}>
+		<p style={{wordWrap: 'anywhere'}}>{ name }</p>
 				<MenuBtn onClick={(e) => { setMenuOpen(prev => !prev); e.preventDefault() }}>
 					<i
 						className="bi bi-three-dots-vertical"
@@ -187,7 +187,7 @@ export default function Project({ name , id }) {
 				</MenuBtn>
 			</Section>
 			<br />
-      <Section style={{position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem'}}>
+		<Section style={{position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem'}}>
 				<div style={{ display: 'flex'}}>
 					<i
 						className="bi bi-clock"
@@ -197,7 +197,7 @@ export default function Project({ name , id }) {
 						}}
 					/>
 					<TimeStamp>
-            { lastTouched }
+						{ lastTouched }
 					</TimeStamp>
 				</div>
 			</Section>
