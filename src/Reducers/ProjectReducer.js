@@ -6,8 +6,15 @@ import {
 } from '../ActionTypes/ProjectActions'
 
 export const ProjectReducer = (state = {}, action) => {
+  // Easiest way to copy a nested object
 	let stateCopy = JSON.parse(JSON.stringify(state))
+  // For creating new projects
 	let id = 0
+
+  // Update lastTouched whenever working with a project
+  if (action.payload?.id !== undefined && action.type !== DUPLICATE_PROJECT) {
+    stateCopy[action.payload.id].lastTouched = Date.now()
+  }
 
 	switch (action.type) {
 		case ADD_PROJECT:
@@ -19,6 +26,7 @@ export const ProjectReducer = (state = {}, action) => {
 			})
 			stateCopy[id+1] = {
 				name: action.payload.name,
+        lastTouched: Date.now(),
 				requests: []
 			}
 			return stateCopy
@@ -41,6 +49,7 @@ export const ProjectReducer = (state = {}, action) => {
 
 			let projectCopy = { ...stateCopy[action.payload.id] }
 			stateCopy[id+1] = projectCopy
+      stateCopy[id+1].lastTouched = Date.now()
 			return stateCopy
 
 		case ADD_REQUEST:
@@ -50,7 +59,8 @@ export const ProjectReducer = (state = {}, action) => {
 				method: 'GET',
 				url: '',
 				bodyType: 'NULL',
-				body: null,
+				textBody: '',
+        structureBody: '',
 				queries: [],
 				pinned: false,
 				headers: [],

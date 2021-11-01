@@ -14,6 +14,8 @@ const Container = styled.div`
 	padding-top: 5rem;
 	margin: 0;
 	z-index: 3;
+  margin-bottom: 0 !important;
+  margin-right: 0 !important;
 `
 
 const Box = styled.div`

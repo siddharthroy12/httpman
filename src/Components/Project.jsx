@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { removeProject, renameProject, duplicateProject } from '../Actions/ProjectActions'
 import styled from 'styled-components'
 import Modal from './Modal'
@@ -83,10 +83,39 @@ const TimeStamp = styled.p`
 	color:  #5f5f5f;
 `
 
+function timeSince(date) {
+  var seconds = Math.floor((new Date() - date) / 1000);
+
+  var interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " years";
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + " months";
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + " days";
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + " hours";
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+}
+
 export default function Project({ name , id }) {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const [showRenameModal, setShowRenameModal] = useState(false)
+  const [lastTouched, setLastTouched] = useState("A long time ago")
+  const projectState = useSelector(state => state.project[id]) 
 	const menuEl = useRef(null);
 	const dispatch = useDispatch()
 
@@ -114,6 +143,13 @@ export default function Project({ name , id }) {
 		dispatch(renameProject(id, newName))
 		setShowRenameModal(false)
 	}
+
+  useEffect(() => {
+    const date = new Date(projectState.lastTouched * 1000)
+
+    setLastTouched(timeSince(new Date(projectState.lastTouched)))
+  }, [projectState.lastTouched])
+
 
 	return (<>
 		{showDeleteModal && (<>
@@ -161,7 +197,7 @@ export default function Project({ name , id }) {
 						}}
 					/>
 					<TimeStamp>
-						6 Hour ago
+            { lastTouched }
 					</TimeStamp>
 				</div>
 			</Section>

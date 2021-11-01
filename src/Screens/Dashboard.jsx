@@ -66,6 +66,8 @@ const StatusBar = styled.div`
 	padding: 0.5rem 1rem;
 	border-top: ${props => props.theme.borderStyle};
 	font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
 `
 
 const Projects = styled.div`
@@ -147,12 +149,13 @@ export default function Dashboard() {
 						/>
 					)
 				})}
-				{ Object.keys(projects).length === 0 &&  (<Center>
+			</Projects>
+        { Object.keys(projects).length === 0 &&  (<Center>
 					Start by creating a new project.
 				</Center>)}
-			</Projects>
 			<StatusBar>
-				{Object.keys(projects).length} Projects
+        <p>{Object.keys(projects).length} Projects</p>
+        <p>Version: 0.0.1</p> 
 			</StatusBar>
 		</Container>
 	)

@@ -181,7 +181,7 @@ const SendRequestBtn = styled.button`
 	background-color: #8E84CB;
 	color: white;
 	padding: 0 1rem;
-	font-size: 0.8rem;
+	font-size: 0.9rem;
 
 	:hover {
 		background-color: rgb(142, 132, 203, 0.8);

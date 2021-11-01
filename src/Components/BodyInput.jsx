@@ -145,7 +145,7 @@ export default function BodyInput({id, requestId}) {
 						</UrlPreview>
 						<QueryList>
 							{projectState.requests[requestId].queries.map((_, index) => {
-								return <PairInput id={id} requestId={requestId} index={index} isQuery/>	
+								return <PairInput id={index} requestId={requestId} index={index} isQuery/>	
 							})}
 						</QueryList>
 						<TabSectionBottom>
@@ -157,7 +157,7 @@ export default function BodyInput({id, requestId}) {
 					<TabSection>
 						<HeaderList>
 							{projectState.requests[requestId].headers.map((_, index) => {
-								return <PairInput key={id} id={id} requestId={requestId} index={index} />	
+								return <PairInput key={index} id={id} requestId={requestId} index={index} />	
 							})}
 						</HeaderList>
 						<TabSectionBottom>

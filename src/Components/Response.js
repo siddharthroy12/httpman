@@ -30,11 +30,11 @@ const ResponseSection = styled.div`
 const HeadersSection = styled.div`
   padding: 1rem;
 
-  > table > tr:nth-child(even) {
+  > table tr:nth-child(even) {
     background-color: #393939;
   }
 
-  > table > tr:nth-child(odd) {
+  > table tr:nth-child(odd) {
     background-color: #292929;
   }
   
@@ -62,12 +62,14 @@ export default function Response({ response }) {
     {selectedTab ===2 && (
       <HeadersSection>
         <table>
-          {Object.keys(response.headers).map(key => (<>
-            <tr>
+          <tbody>
+          {Object.keys(response.headers).map(key => (
+            <tr key={key}>
               <td> { key } </td>
               <td> { response.headers[key] } </td>
             </tr>
-          </>))}
+          ))}
+          </tbody>
         </table>
       </HeadersSection>
     )}
