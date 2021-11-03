@@ -145,8 +145,6 @@ export default function Project({ name , id }) {
 	}
 
 	useEffect(() => {
-		const date = new Date(projectState.lastTouched * 1000)
-
 		setLastTouched(timeSince(new Date(projectState.lastTouched)))
 	}, [projectState.lastTouched])
 

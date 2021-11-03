@@ -90,7 +90,7 @@ export default function Header() {
 					<HeaderText>HTTPMAN </HeaderText>
 				</Link>
 				{ pathIsProject && (<>
-					<Divider><i className="bi bi-caret-right-fill"></i></Divider>	
+					<Divider><i class="bi bi-chevron-right"></i></Divider>	
 					<p> { pathIsProject && projectName } </p>
 				</>)}
         <Spacer />

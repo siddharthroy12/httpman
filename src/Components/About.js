@@ -118,9 +118,9 @@ export default function About({ onClose }) {
           <p>HTTPMAN</p>
           <p>An open-source HTTP Client</p>
           <Links>
-            <a href="https://twitter.com/Siddharth_Roy12" target="_blank">Author</a>
-            <a href="https://github.com/siddharthroy12/httpman" target="_blank">Source Code</a>
-            <a href="https://github.com/siddharthroy12/httpman/issues" target="_blank">Submit Issues</a>
+            <a href="https://twitter.com/Siddharth_Roy12" target="_blank" rel="noreferrer">Author</a>
+            <a href="https://github.com/siddharthroy12/httpman" target="_blank" rel="noreferrer">Source Code</a>
+            <a href="https://github.com/siddharthroy12/httpman/issues" target="_blank" rel="noreferrer">Submit Issues</a>
           </Links>
         </Head>
 			</Box>
