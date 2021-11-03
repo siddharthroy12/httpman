@@ -329,7 +329,8 @@ export default function Project() {
 									/>
 									Add Request
 								</MenuItem>
-								<MenuItem>
+                {/* Will do this later */}
+                {/*<MenuItem>
 									<i
 										className="bi bi-folder-fill"
 										style={{
@@ -338,7 +339,7 @@ export default function Project() {
 										}}
 									/>
 									Add Folder
-								</MenuItem>
+                </MenuItem>*/}
 							</AddButtonMenu>
 						)}
 					</AddButton>
