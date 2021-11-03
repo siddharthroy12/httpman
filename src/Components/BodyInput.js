@@ -143,12 +143,12 @@ export default function BodyInput({id, requestId}) {
 					<TabSection>
 						<Label>URL PREVIEW</Label>
 						<UrlPreview>
-							{projectState.requests[requestId].url}?
+							{projectState.requests[requestId].url}
 							{generateQueryString(projectState.requests[requestId].queries)}
 						</UrlPreview>
 						<QueryList>
 							{projectState.requests[requestId].queries.map((_, index) => {
-								return <PairInput id={index} requestId={requestId} index={index} isQuery/>	
+								return <PairInput key={index} id={id} requestId={requestId} index={index} isQuery/>	
 							})}
 						</QueryList>
 						<TabSectionBottom>

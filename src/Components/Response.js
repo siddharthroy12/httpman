@@ -46,7 +46,6 @@ const HeadersSection = styled.div`
 
 export default function Response({ response }) {
 	const [selectedTab, setSelectedTab] = useState(1)
-	console.log(response)
 
 	return (<>
 		<Tabs>

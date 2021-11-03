@@ -7,5 +7,5 @@ export default function generateQueryString(queries) {
 		return null
 	})
 
-	return final
+	return '?' + final
 }
