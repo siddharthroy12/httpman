@@ -23,6 +23,13 @@ If you have dependencies installed run this
 yarn start
 ```
 
+## TODO
+
+- [ ] Add folders for requests
+- [ ] Add more body types (form, file, multipart form)
+- [ ] Add syntax highlighting for response
+- [ ] Add JSON stytax checker
+- [ ] Add network error message
 
 ## Author
 [@Siddharth_Roy12](https://twitter.com/Siddharth_Roy12)
