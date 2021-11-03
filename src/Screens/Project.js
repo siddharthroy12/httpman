@@ -244,18 +244,32 @@ export default function Project() {
 
 	const sendRequest = async () => {
 		let res
+    let headers = {}
+    const body = JSON.parse(projectState.requests[selectedItem].textBody)
+    const method = projectState.requests[selectedItem].method 
+
+    projectState.requests[selectedItem].headers.forEach(header => {
+      if (header.name.trim() !== '' && header.value.trim() !== '') {
+        headers[header.name] = header.value
+      }
+    })
+
+    if (method === "POST" || method === "PUT") {
+      headers["content-type"] = "application/json"
+    }
+
 		try {
 			switch(projectState.requests[selectedItem].method) {
 				case 'GET':
-					res =	await axios.get(getFullUrl(projectState.requests[selectedItem]))
+					res =	await axios.get(getFullUrl(projectState.requests[selectedItem]), { headers })
 					setResponse(res)
 					break;
 				case 'POST':
-					res = await axios.post(getFullUrl(projectState.requests[selectedItem]))
+					res = await axios.post(getFullUrl(projectState.requests[selectedItem]), body, { headers })
 					setResponse(res)
 					break;
 				case 'PUT':
-					res = await axios.put(getFullUrl(projectState.requests[selectedItem]))
+					res = await axios.put(getFullUrl(projectState.requests[selectedItem]), body, { headers })
 					setResponse(res)
 					break;
 				case 'DELETE':

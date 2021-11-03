@@ -7,9 +7,9 @@ import {
 
 export const ProjectReducer = (state = {}, action) => {
 	// Easiest way to copy a nested object
-		let stateCopy = JSON.parse(JSON.stringify(state))
+	let stateCopy = JSON.parse(JSON.stringify(state))
 	// For creating new projects
-		let id = 0
+	let id = 0
 
 	// Update lastTouched whenever working with a project
 	if (action.payload?.id !== undefined && action.type !== DUPLICATE_PROJECT) {
@@ -26,7 +26,7 @@ export const ProjectReducer = (state = {}, action) => {
 			})
 			stateCopy[id+1] = {
 				name: action.payload.name,
-		lastTouched: Date.now(),
+        lastTouched: Date.now(),
 				requests: []
 			}
 			return stateCopy
@@ -60,7 +60,7 @@ export const ProjectReducer = (state = {}, action) => {
 				url: '',
 				bodyType: 'NULL',
 				textBody: '',
-		structureBody: '',
+        structuredBody: '',
 				queries: [],
 				pinned: false,
 				headers: [],
@@ -85,13 +85,18 @@ export const ProjectReducer = (state = {}, action) => {
 					.headers = ((action.payload.headers !== null) && action.payload.headers !== undefined) ?
 						action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
 			stateCopy[action.payload.id]
-			.requests[action.payload.requestId]
-				.bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ?
-					action.payload.bodyType : stateCopy[action.payload.id].requests[action.payload.requestId].bodyType
+			  .requests[action.payload.requestId]
+				  .bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ?
+					  action.payload.bodyType : stateCopy[action.payload.id].requests[action.payload.requestId].bodyType
 			stateCopy[action.payload.id]
-			.requests[action.payload.requestId]
-				.body = ((action.payload.body !== null) && action.payload.body !== undefined) ?
-					action.payload.body : stateCopy[action.payload.id].requests[action.payload.requestId].body
+			  .requests[action.payload.requestId]
+				  .textBody = ((action.payload.textBody !== null) && action.payload.textBody !== undefined) ?
+					  action.payload.textBody : stateCopy[action.payload.id].requests[action.payload.requestId].textBody
+      stateCopy[action.payload.id]
+			  .requests[action.payload.requestId]
+				  .structuredBody = ((action.payload.structuredBody !== null) && action.payload.structuredBody !== undefined) ?
+					  action.payload.structuredBody : stateCopy[action.payload.id].requests[action.payload.requestId].structuredBody
+
 
 			return stateCopy;
 

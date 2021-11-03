@@ -95,7 +95,6 @@ const Tabs = {
 
 export default function BodyInput({id, requestId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
-	const [jsonBody, setJsonBody] = useState('')
 	const projectState = useSelector(state => state.project[id])
 	const dispatch = useDispatch()
 	
@@ -112,6 +111,10 @@ export default function BodyInput({id, requestId}) {
 
 		dispatch(updateRequest(id, requestId, null, null, null, updatedHeaders))
 	}
+
+  const updateTextBody = (value) => {
+    dispatch(updateRequest(id, requestId, null, null, null, null, null, value))
+  }
 	
 	return (
 		<div>
@@ -132,8 +135,8 @@ export default function BodyInput({id, requestId}) {
 					<Editor
 						mode="json"
 						theme="monokai"
-						onChange={(value) => setJsonBody(value)}
-						value={jsonBody}
+						onChange={updateTextBody}
+						value={projectState.textBody}
 				  />
 				)}
 				{ selectedTab === Tabs.QUERY && (
