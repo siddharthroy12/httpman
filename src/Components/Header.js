@@ -90,8 +90,8 @@ export default function Header() {
 					<HeaderText>HTTPMAN </HeaderText>
 				</Link>
 				{ pathIsProject && (<>
-					<Divider><i class="bi bi-chevron-right"></i></Divider>	
-					<p> { pathIsProject && projectName } </p>
+					<Divider><i className="bi bi-caret-right-fill"></i></Divider>	
+          <p style={{width: '100%'}}> { pathIsProject && projectName } </p>
 				</>)}
         <Spacer />
         <RightSide>

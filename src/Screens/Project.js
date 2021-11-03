@@ -48,7 +48,7 @@ const TextInput = styled.input`
 	width: 100%;
 `
 
-const AddButton = styled.button`
+const AddButton = styled.div`
 	border: none;
 	background-color: unset;
 	display: flex;

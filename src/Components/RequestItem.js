@@ -171,20 +171,20 @@ export default function RequestItem({ id, requestId, selected, onClick }) {
 			{menuOpen && (
 				<DropdownMenu ref={menuEl}>
 					<MenuItem onClick={() => setShowRenameItemModal(true)}>
-						<i class="bi bi-cursor-text"></i>
+						<i className="bi bi-cursor-text"></i>
 						Rename
 					</MenuItem>
 					<MenuItem onClick={() => { dispatch(duplicateRequest(id, requestId)); setMenuOpen(false) }}>
-						<i class="bi bi-files"></i>
+						<i className="bi bi-files"></i>
 						Duplicate
 					</MenuItem>
 					<MenuItem onClick={() => { dispatch(pinRequest(id, requestId)); setMenuOpen(false) }}>
-						<i class="bi bi-pin-angle"></i>
+						<i className="bi bi-pin-angle"></i>
 						{requestInfo.pinned ? 'Unpin' : 'Pin'}
 					</MenuItem>
 					<MenuDivider />
 					<MenuItem red onClick={() => dispatch(deleteRequest(id, requestId))}>
-						<i class="bi bi-file-earmark-x-fill"></i>
+						<i className="bi bi-file-earmark-x-fill"></i>
 						Delete
 					</MenuItem>
 				</DropdownMenu>

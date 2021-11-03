@@ -136,7 +136,7 @@ export default function BodyInput({id, requestId}) {
 						mode="json"
 						theme="monokai"
 						onChange={updateTextBody}
-						value={projectState.textBody}
+						value={projectState.requests[requestId].textBody}
 				  />
 				)}
 				{ selectedTab === Tabs.QUERY && (

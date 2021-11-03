@@ -10,7 +10,7 @@ const Container = styled(Link)`
 	border-radius: 3px;
 	border: ${(props) => props.theme.borderStyle};
 	display: inline-block;
-	width: 10rem;
+	width: 12rem;
 	text-decoration: none;
 	color: white;
   min-height: 6rem;
@@ -29,7 +29,7 @@ const Section = styled.div`
 	align-items: center;
 `
 
-const MenuBtn = styled.button`
+const MenuBtn = styled.div`
 	background-color: unset;
 	border: none;
 	display: flex;
