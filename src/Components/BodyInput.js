@@ -97,7 +97,7 @@ export default function BodyInput({id, requestId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
 	const projectState = useSelector(state => state.project[id])
 	const dispatch = useDispatch()
-	
+
 	const addQuery = () => {
 		let updatedQueries = [...projectState.requests[requestId].queries]	
 		updatedQueries.push({ name: '', value: ''})
@@ -112,9 +112,9 @@ export default function BodyInput({id, requestId}) {
 		dispatch(updateRequest(id, requestId, null, null, null, updatedHeaders))
 	}
 
-  const updateTextBody = (value) => {
-    dispatch(updateRequest(id, requestId, null, null, null, null, null, value))
-  }
+	const updateTextBody = (value) => {
+	dispatch(updateRequest(id, requestId, null, null, null, null, null, value))
+	}
 	
 	return (
 		<div>
@@ -137,7 +137,7 @@ export default function BodyInput({id, requestId}) {
 						theme="monokai"
 						onChange={updateTextBody}
 						value={projectState.requests[requestId].textBody}
-				  />
+					/>
 				)}
 				{ selectedTab === Tabs.QUERY && (
 					<TabSection>

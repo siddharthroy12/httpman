@@ -244,19 +244,19 @@ export default function Project() {
 
 	const sendRequest = async () => {
 		let res
-    let headers = {}
-    const body = JSON.parse(projectState.requests[selectedItem].textBody)
-    const method = projectState.requests[selectedItem].method 
+		let headers = {}
+		const body = JSON.parse(projectState.requests[selectedItem].textBody)
+		const method = projectState.requests[selectedItem].method 
 
-    projectState.requests[selectedItem].headers.forEach(header => {
-      if (header.name.trim() !== '' && header.value.trim() !== '') {
-        headers[header.name] = header.value
-      }
-    })
+		projectState.requests[selectedItem].headers.forEach(header => {
+			if (header.name.trim() !== '' && header.value.trim() !== '') {
+				headers[header.name] = header.value
+			}
+		})
 
-    if (method === "POST" || method === "PUT") {
-      headers["content-type"] = "application/json"
-    }
+		if (method === "POST" || method === "PUT") {
+			headers["content-type"] = "application/json"
+		}
 
 		try {
 			switch(projectState.requests[selectedItem].method) {
@@ -329,8 +329,8 @@ export default function Project() {
 									/>
 									Add Request
 								</MenuItem>
-                {/* Will do this later */}
-                {/*<MenuItem>
+								{/* Will do this later */}
+								{/*<MenuItem>
 									<i
 										className="bi bi-folder-fill"
 										style={{
@@ -339,7 +339,7 @@ export default function Project() {
 										}}
 									/>
 									Add Folder
-                </MenuItem>*/}
+								</MenuItem>*/}
 							</AddButtonMenu>
 						)}
 					</AddButton>

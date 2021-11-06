@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { 
+import {
 	deleteRequest, renameRequest, pinRequest, duplicateRequest
 } from '../Actions/ProjectActions'
 import styled from 'styled-components'

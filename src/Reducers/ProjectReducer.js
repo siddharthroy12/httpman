@@ -26,7 +26,7 @@ export const ProjectReducer = (state = {}, action) => {
 			})
 			stateCopy[id+1] = {
 				name: action.payload.name,
-        lastTouched: Date.now(),
+				lastTouched: Date.now(),
 				requests: []
 			}
 			return stateCopy
@@ -49,7 +49,7 @@ export const ProjectReducer = (state = {}, action) => {
 
 			let projectCopy = { ...stateCopy[action.payload.id] }
 			stateCopy[id+1] = projectCopy
-	  stateCopy[id+1].lastTouched = Date.now()
+			stateCopy[id+1].lastTouched = Date.now()
 			return stateCopy
 
 		case ADD_REQUEST:
@@ -60,13 +60,13 @@ export const ProjectReducer = (state = {}, action) => {
 				url: '',
 				bodyType: 'NULL',
 				textBody: '',
-        structuredBody: '',
+				structuredBody: '',
 				queries: [],
 				pinned: false,
 				headers: [],
 			})
 			return stateCopy
-		
+
 		case UPDATE_REQUEST:
 			stateCopy[action.payload.id]
 				.requests[action.payload.requestId]
@@ -85,17 +85,17 @@ export const ProjectReducer = (state = {}, action) => {
 					.headers = ((action.payload.headers !== null) && action.payload.headers !== undefined) ?
 						action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
 			stateCopy[action.payload.id]
-			  .requests[action.payload.requestId]
-				  .bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ?
-					  action.payload.bodyType : stateCopy[action.payload.id].requests[action.payload.requestId].bodyType
+				.requests[action.payload.requestId]
+					.bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ?
+						action.payload.bodyType : stateCopy[action.payload.id].requests[action.payload.requestId].bodyType
 			stateCopy[action.payload.id]
-			  .requests[action.payload.requestId]
-				  .textBody = ((action.payload.textBody !== null) && action.payload.textBody !== undefined) ?
-					  action.payload.textBody : stateCopy[action.payload.id].requests[action.payload.requestId].textBody
-      stateCopy[action.payload.id]
-			  .requests[action.payload.requestId]
-				  .structuredBody = ((action.payload.structuredBody !== null) && action.payload.structuredBody !== undefined) ?
-					  action.payload.structuredBody : stateCopy[action.payload.id].requests[action.payload.requestId].structuredBody
+				.requests[action.payload.requestId]
+					.textBody = ((action.payload.textBody !== null) && action.payload.textBody !== undefined) ?
+						action.payload.textBody : stateCopy[action.payload.id].requests[action.payload.requestId].textBody
+			stateCopy[action.payload.id]
+				.requests[action.payload.requestId]
+					.structuredBody = ((action.payload.structuredBody !== null) && action.payload.structuredBody !== undefined) ?
+						action.payload.structuredBody : stateCopy[action.payload.id].requests[action.payload.requestId].structuredBody
 
 
 			return stateCopy;
@@ -103,19 +103,19 @@ export const ProjectReducer = (state = {}, action) => {
 		case DELETE_REQUEST:
 			stateCopy[action.payload.id].requests.splice(action.payload.requestId, 1)
 			return stateCopy
-		
+
 		case RENAME_REQUEST:
 			stateCopy[action.payload.id].requests[action.payload.requestId].name = action.payload.newName
 			return stateCopy
-		
+
 		case PIN_REQUEST:
 			stateCopy[action.payload.id].requests[action.payload.requestId].pinned = !stateCopy[action.payload.id].requests[action.payload.requestId].pinned
 			return stateCopy
-		
+
 		case DUPLICATE_REQUEST:
 			let requestCopy = { ...stateCopy[action.payload.id].requests[action.payload.requestId] }
 			stateCopy[action.payload.id].requests.push(requestCopy)
-			return stateCopy	
+			return stateCopy
 		default:
 			return state
 	}

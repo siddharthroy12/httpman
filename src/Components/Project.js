@@ -13,14 +13,14 @@ const Container = styled(Link)`
 	width: 12rem;
 	text-decoration: none;
 	color: white;
-  min-height: 6rem;
-  height: min-content;
+	min-height: 6rem;
+	height: min-content;
 
 	:hover {
 		border-color: #ACA0F2;
 	}
 
-  position: relative;
+	position: relative;
 `
 
 const Section = styled.div`
@@ -56,7 +56,7 @@ const Menu = styled.div`
 	left: -5px;
 	top: -50px;
 	padding: 0.2rem 0;
-  z-index: 4;
+	z-index: 4;
 `
 
 const MenuItem = styled.button`
@@ -127,9 +127,9 @@ export default function Project({ name , id }) {
 
 	useEffect(() => {
 		document.addEventListener('click', handleClickOutside, true);
-    		return () => {
+		return () => {
 			document.removeEventListener('click', handleClickOutside, true);
-    	};
+		};
 	})
 
 	const onDeleteConfirm = (name_) => {

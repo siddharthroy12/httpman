@@ -72,7 +72,7 @@ const StatusBar = styled.div`
 
 const Projects = styled.div`
 	margin-top: 1rem;
-  display: flex;
+	display: flex;
 
 	> * {
 		margin-right: 1rem;
@@ -134,7 +134,7 @@ export default function Dashboard() {
 				</HeaderActions>
 			</Header>
 			<Projects>
-				{ Object.keys(projects).map(id => {
+				{Object.keys(projects).map(id => {
 					if (filter.trim() !== '') {
 						if (!searchString(filter, projects[id].name)) {
 							return null
@@ -150,12 +150,12 @@ export default function Dashboard() {
 					)
 				})}
 			</Projects>
-        { Object.keys(projects).length === 0 &&  (<Center>
-					Start by creating a new project.
-				</Center>)}
+			{Object.keys(projects).length === 0 &&  (<Center>
+				Start by creating a new project.
+			</Center>)}
 			<StatusBar>
-        <p>{Object.keys(projects).length} Projects</p>
-        <p>Version: 0.0.3</p> 
+				<p>{Object.keys(projects).length} Projects</p>
+				<p>Version: 0.0.3</p>
 			</StatusBar>
 		</Container>
 	)

@@ -15,8 +15,8 @@ const Container = styled.div`
 	padding-top: 5rem;
 	margin: 0;
 	z-index: 3;
-  margin-bottom: 0 !important;
-  margin-right: 0 !important;
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
 `
 
 const Box = styled.div`
@@ -53,33 +53,33 @@ const Title = styled.p`
 `
 
 const Head = styled.div`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 1rem;
-  
-  > * {
-    margin-top: 1rem;
-  }
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-bottom: 1rem;
+
+	> * {
+		margin-top: 1rem;
+	}
 `
 
 const AppIcon = styled.img`
-  display: block;
-  --size: 4rem;
+	display: block;
+	--size: 4rem;
 
-  width: var(--size);
-  height: var(---size);
+	width: var(--size);
+	height: var(---size);
 `
 
 const Links = styled.div`
-  display: flex;
-  justify-content: center;
-  
-  > * {
-    margin: 0 0.5rem;
-  }
+	display: flex;
+	justify-content: center;
+
+	> * {
+		margin: 0 0.5rem;
+	}
 }
 `
 
@@ -113,16 +113,16 @@ export default function About({ onClose }) {
 						/>
 					</CloseButton>
 				</Top>
-        <Head>
-          <AppIcon src={appIcon} />
-          <p>HTTPMAN</p>
-          <p>An open-source HTTP Client</p>
-          <Links>
-            <a href="https://twitter.com/Siddharth_Roy12" target="_blank" rel="noreferrer">Author</a>
-            <a href="https://github.com/siddharthroy12/httpman" target="_blank" rel="noreferrer">Source Code</a>
-            <a href="https://github.com/siddharthroy12/httpman/issues" target="_blank" rel="noreferrer">Submit Issues</a>
-          </Links>
-        </Head>
+				<Head>
+					<AppIcon src={appIcon} />
+					<p>HTTPMAN</p>
+					<p>An open-source HTTP Client</p>
+					<Links>
+						<a href="https://twitter.com/Siddharth_Roy12" target="_blank" rel="noreferrer">Author</a>
+						<a href="https://github.com/siddharthroy12/httpman" target="_blank" rel="noreferrer">Source Code</a>
+						<a href="https://github.com/siddharthroy12/httpman/issues" target="_blank" rel="noreferrer">Submit Issues</a>
+					</Links>
+				</Head>
 			</Box>
 		</Container>
 	)

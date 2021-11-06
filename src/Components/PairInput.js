@@ -42,7 +42,7 @@ export default function QueryInput({id, requestId, index, isQuery}) {
 	const updateName = (event) => {
 		let copy = isQuery ? [...queries] : [...headers]
 		copy[index].name = event.target.value
-	
+
 		if (isQuery) { 
 			dispatch(updateRequest(id, requestId, null, null, copy))		
 		} else {
@@ -53,7 +53,7 @@ export default function QueryInput({id, requestId, index, isQuery}) {
 	const updateValue = (event) => {
 		let copy = isQuery ? [...queries] : [...headers]
 		copy[index].value = event.target.value
-	
+
 		if (isQuery) { 
 			dispatch(updateRequest(id, requestId, null, null, copy))		
 		} else {
@@ -65,7 +65,7 @@ export default function QueryInput({id, requestId, index, isQuery}) {
 		let copy = isQuery ? [...queries] : [...headers]
 
 		copy = copy.filter((_, i) => i !== index)
-	
+
 		if (isQuery) { 
 			dispatch(updateRequest(id, requestId, null, null, copy))		
 		} else {

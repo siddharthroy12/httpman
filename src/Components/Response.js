@@ -42,7 +42,7 @@ const HeadersSection = styled.div`
 		padding: 0.5rem;
 		width: 50%;
 	}
-` 
+`
 
 export default function Response({ response }) {
 	const [selectedTab, setSelectedTab] = useState(1)

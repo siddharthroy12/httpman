@@ -30,45 +30,45 @@ const Divider = styled.p`
 `
 
 const Spacer = styled.div`
-  width: 100%;
+	width: 100%;
 `
 
 const RightSide = styled.div`
-  display: flex;
+	display: flex;
 
-  > * {
-    margin-left: 1rem;
-  }
+	> * {
+		margin-left: 1rem;
+	}
 `
 
 const ButtonStyle = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
 
-  --size: 2rem;
+	--size: 2rem;
 
-  height: var(--size);
-  width: var(--size);
-  border: 1px solid;
-  border-color: rgba(0,0,0,0);
-  color: white;
-  font-size: 1.5rem;
-  
-  :hover {
-    border-color: #ACA0F2;
-  }
+	height: var(--size);
+	width: var(--size);
+	border: 1px solid;
+	border-color: rgba(0,0,0,0);
+	color: white;
+	font-size: 1.5rem;
+
+	:hover {
+		border-color: #ACA0F2;
+	}
 `
 
 const SourceLink = styled.a`
-  ${ButtonStyle}
+	${ButtonStyle}
 `
 
 const AboutButton = styled.button`
-  ${ButtonStyle}
-  background-color: unset;
-  cursor: pointer;
+	${ButtonStyle}
+	background-color: unset;
+	cursor: pointer;
 `
 
 function getProjectIndex(str) {
@@ -79,30 +79,30 @@ export default function Header() {
 	const location = useLocation()
 	const projects = useSelector(state => state.project)
 	const pathIsProject = location.pathname.startsWith('/project/')
-  const [showAbout, setShowAbout] = useState(false)
+	const [showAbout, setShowAbout] = useState(false)
 	const projectName = pathIsProject ? projects[getProjectIndex(location.pathname)].name : ''
 
-  return (<>
-    {showAbout && <About onClose={() => setShowAbout(false)} />}
+	return (<>
+		{showAbout && <About onClose={() => setShowAbout(false)} />}
 		<Wrapper>
-      <Container style={{width:'100%', padding: '0 1rem', alignItems: 'center'}}>
+			<Container style={{width:'100%', padding: '0 1rem', alignItems: 'center'}}>
 				<Link to='/'>
 					<HeaderText>HTTPMAN </HeaderText>
 				</Link>
-				{ pathIsProject && (<>
+				{pathIsProject && (<>
 					<Divider><i className="bi bi-caret-right-fill"></i></Divider>	
-          <p style={{width: '100%'}}> { pathIsProject && projectName } </p>
+					<p style={{width: '100%'}}> { pathIsProject && projectName } </p>
 				</>)}
-        <Spacer />
-        <RightSide>
-          <SourceLink href="https://github.com/siddharthroy12/httpman" target="_blank">
-            <i className="bi bi-github" style={{width: '24px', height: '28px'}}></i>
-          </SourceLink>
-          <AboutButton onClick={() => setShowAbout(prev => !prev)}>
-            <i className="bi bi-info-circle"></i>
-          </AboutButton>
-        </RightSide>
+				<Spacer />
+				<RightSide>
+					<SourceLink href="https://github.com/siddharthroy12/httpman" target="_blank">
+						<i className="bi bi-github" style={{width: '24px', height: '28px'}}></i>
+					</SourceLink>
+					<AboutButton onClick={() => setShowAbout(prev => !prev)}>
+					<i className="bi bi-info-circle"></i>
+				</AboutButton>
+			</RightSide>
 			</Container>
 		</Wrapper>
-  </>)
+	</>)
 }
