@@ -3,11 +3,12 @@ import styled from 'styled-components'
 import axios from 'axios'
 import Modal from '../Components/Modal'
 import RequestItem from '../Components/RequestItem'
+import FolderItem from '../Components/FolderItem'
 import BodyInput from '../Components/BodyInput'
 import Response from '../Components/Response.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import { addRequest, updateRequest } from '../Actions/ProjectActions'
+import { addRequest, addFolder, updateRequest } from '../Actions/ProjectActions'
 import searchString from '../Utils/searchString'
 import generateQueryString from '../Utils/generateQueryString.js'
 
@@ -216,7 +217,7 @@ export default function Project() {
 	const methodMenuEl = useRef(null)
 	const [showAddButtonMenu, setShowAddButtonMenu] = useState(false)
 	const [showMethodButtonMenu, setShowMethodButtonMenu] = useState(false)
-	const [showAddRequestModal, setShowAddRequestModal] = useState(false)
+	const [showAddRequestModal, setShowAddRequestModal] = useState(0) // 0 means no, 1 means request, 2 means folder
 	const [response, setResponse] = useState(null)
 	const [selectedItem, setSelectedItem] = useState(null)
 	const [filter, setFilter] = useState('')
@@ -238,8 +239,8 @@ export default function Project() {
 	})
 
 	const onAddRequestConfirm = (name) => {
-		dispatch(addRequest(id, name))
-		setShowAddRequestModal(false)
+		dispatch(showAddRequestModal === 1 ? addRequest(id, name): addFolder(id, name))
+		setShowAddRequestModal(0)
 	}
 
 	const sendRequest = async () => {
@@ -293,12 +294,12 @@ export default function Project() {
 
 	return (
 		<Container>
-			{showAddRequestModal && (
+			{showAddRequestModal !== 0 && (
 				<Modal
-					title="New Request"
+					title={showAddRequestModal === 1 ? "New Request" : "New Folder"}
 					buttonTitle="Create"
 					onDone={onAddRequestConfirm}
-					onClose={() => setShowAddRequestModal(false)}
+					onClose={() => setShowAddRequestModal(0)}
 				/>
 			)}
 			<Sidebar>
@@ -319,7 +320,7 @@ export default function Project() {
 						/>
 						{showAddButtonMenu && (
 							<AddButtonMenu>
-								<MenuItem onClick={() => setShowAddRequestModal(true)}>
+								<MenuItem onClick={() => setShowAddRequestModal(1)}>
 									<i
 										className="bi bi-plus-circle-fill"
 										style={{
@@ -329,8 +330,7 @@ export default function Project() {
 									/>
 									Add Request
 								</MenuItem>
-								{/* Will do this later */}
-								{/*<MenuItem>
+								<MenuItem onClick={() => setShowAddRequestModal(2)}>
 									<i
 										className="bi bi-folder-fill"
 										style={{
@@ -339,7 +339,7 @@ export default function Project() {
 										}}
 									/>
 									Add Folder
-								</MenuItem>*/}
+								</MenuItem>
 							</AddButtonMenu>
 						)}
 					</AddButton>
@@ -383,7 +383,17 @@ export default function Project() {
 										onClick={() => setSelectedItem(index)}
 									/>
 								)
-								default:
+
+							case "FOLDER":
+								return (
+									<FolderItem
+										key={index}
+										id={id}
+										requestId={index}
+									/>
+								)
+
+							default:
 								break
 						}
 						return null

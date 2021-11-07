@@ -2,7 +2,7 @@ import {
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
 	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST,
 	DUPLICATE_REQUEST, PIN_REQUEST, RENAME_REQUEST,
-	DUPLICATE_PROJECT
+	DUPLICATE_PROJECT, ADD_FOLDER
 } from '../ActionTypes/ProjectActions'
 
 export const ProjectReducer = (state = {}, action) => {
@@ -96,8 +96,6 @@ export const ProjectReducer = (state = {}, action) => {
 				.requests[action.payload.requestId]
 					.structuredBody = ((action.payload.structuredBody !== null) && action.payload.structuredBody !== undefined) ?
 						action.payload.structuredBody : stateCopy[action.payload.id].requests[action.payload.requestId].structuredBody
-
-
 			return stateCopy;
 
 		case DELETE_REQUEST:
@@ -116,6 +114,15 @@ export const ProjectReducer = (state = {}, action) => {
 			let requestCopy = { ...stateCopy[action.payload.id].requests[action.payload.requestId] }
 			stateCopy[action.payload.id].requests.push(requestCopy)
 			return stateCopy
+
+		case ADD_FOLDER:
+			stateCopy[action.payload.id].requests.push({
+				name: action.payload.name,
+				type: 'FOLDER',
+				requests: []
+			})
+			return stateCopy
+
 		default:
 			return state
 	}

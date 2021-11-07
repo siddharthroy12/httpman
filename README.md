@@ -10,6 +10,7 @@ A simple HTTP Client for testing REST API(s)
 
 * Git
 * Node
+
 ### Installing
 
 * Clone this repo
@@ -32,8 +33,8 @@ yarn start
 - [ ] Add network error message
 
 ## Author
-[@Siddharth_Roy12](https://twitter.com/Siddharth_Roy12)
 
+[@Siddharth_Roy12](https://twitter.com/Siddharth_Roy12)
 
 ## License
 

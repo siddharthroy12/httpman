@@ -13,7 +13,7 @@ const Container = styled.div`
 	align-items: flex-start;
 	padding-top: 5rem;
 	margin: 0;
-	z-index: 3;
+	z-index: 5;
 	margin-bottom: 0 !important;
 	margin-right: 0 !important;
 `
