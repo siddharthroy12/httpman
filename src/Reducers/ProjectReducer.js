@@ -5,6 +5,15 @@ import {
 	DUPLICATE_PROJECT, ADD_FOLDER
 } from '../ActionTypes/ProjectActions'
 
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 export const ProjectReducer = (state = {}, action) => {
 	// Easiest way to copy a nested object
 	let stateCopy = JSON.parse(JSON.stringify(state))
@@ -53,7 +62,7 @@ export const ProjectReducer = (state = {}, action) => {
 			return stateCopy
 
 		case ADD_REQUEST:
-			stateCopy[action.payload.id].requests.push({
+			const request = {
 				type: 'REQUEST',
 				name: action.payload.name,
 				method: 'GET',
@@ -64,7 +73,14 @@ export const ProjectReducer = (state = {}, action) => {
 				queries: [],
 				pinned: false,
 				headers: [],
-			})
+			}
+
+			if (action.payload.folderId !== undefined) {
+				stateCopy[action.payload.id].requests[action.payload.folderId].requests.push({...request})
+			} else {
+				stateCopy[action.payload.id].requests.push({...request})
+			}
+
 			return stateCopy
 
 		case UPDATE_REQUEST:
@@ -118,6 +134,7 @@ export const ProjectReducer = (state = {}, action) => {
 		case ADD_FOLDER:
 			stateCopy[action.payload.id].requests.push({
 				name: action.payload.name,
+				color: getRandomColor(),
 				type: 'FOLDER',
 				requests: []
 			})

@@ -1,4 +1,4 @@
-import { 
+import {
 	ADD_PROJECT, REMOVE_PROJECT, RENAME_PROJECT,
 	ADD_REQUEST, DELETE_REQUEST, UPDATE_REQUEST,
 	DUPLICATE_REQUEST, PIN_REQUEST, RENAME_REQUEST,
@@ -40,11 +40,11 @@ export const duplicateProject = (id) => async (dispatch) => {
 	})
 }
 
-export const addRequest = (id, name) => async (dispatch) => {
+export const addRequest = (id, name, folderId) => async (dispatch) => {
 	dispatch({
 		type: ADD_REQUEST,
 		payload: {
-			id, name
+			id, name, folderId
 		}
 	})
 }

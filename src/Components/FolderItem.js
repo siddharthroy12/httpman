@@ -1,111 +1,32 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-	deleteRequest, renameRequest, pinRequest, duplicateRequest
+	addRequest, deleteRequest, renameRequest
 } from '../Actions/ProjectActions'
-import styled from 'styled-components'
 import Modal from './Modal'
+import {
+	Container, Name, DropdownBtn, PinnedIcon, DropdownMenu,
+	MenuDivider, MenuItem
+} from './RequestItem'
+import RequestItem from './RequestItem'
+import styled from 'styled-components'
 
-const Container = styled.div`
-	padding: 0.5rem 1rem;
-
-	transition-duration: 0ms !important;
-
-	${(props) => props.selected ? 'background-color: rgba(255,255,255, 0.1);' : null}
-
-	:hover {
-		background-color: rgba(255,255,255, 0.1);
-		transition-duration: 0ms !important;
-
-		> button {
-			display: block;
-		}
-
-		> p {
-			display: none;
-		}
-	}
-
-	display: flex;
-	justify-content: space-between;
-
-	> div {
-		display: flex;
-	}
-
-	> button {
-		display: none;
-	}
-
-	position: relative;
+const CustomContainer = styled(Container)`
+	border-left: 4px solid ${props => props.color};
 `
 
-const Name = styled.p`
-	font-size: 0.9rem;
-`
-
-const DropdownBtn = styled.button`
-	border: none;
-	background-color: unset;
-	color: #B6B6B6;
-
-	:hover {
-		color: white;
-	}
-`
-
-const PinnedIcon = styled.p`
-	color: #B6B6B6;
-	font-size: 0.9rem;
-
-	:hover {
-		display: none;
-	}
-`
-
-const DropdownMenu = styled.div`
-	position: absolute;
-	right: -10px;
-	top: 2rem;
-	border: ${(props) => props.theme.borderStyle};
-	background-color: #2A2A2A;
-	z-index: 5;
-	padding: 0.2rem 0;
-	border-radius: 3px;
-	display: flex;
-	flex-direction: column;
-	width: 10rem;
-`
-
-const MenuDivider = styled.hr`
-	border: none;
-	border-bottom: 1px solid #3e3e3e;
-	margin: 0.2rem 0;
-`
-
-const MenuItem = styled.button`
-	border: none;
-	background-color: unset;
-	color: ${(props) => props.red ? '#F45866' : 'white'};
-	padding: 0.5rem 1rem;
-	width: 100%;
-	text-align: start;
-
-	> i {
-		margin-right: 1rem;
-	}
-
-	:hover {
-		background-color: rgba(225,225,225, 0.1);
-	}
+const Inner = styled.div`
+	border-left: 4px solid ${props => props.color};
 `
 
 export default function FolderItem({ id, requestId, selected, onClick }) {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const [folderOpen, setFolderOpen] = useState(false)
-	const menuEl = useRef(null);
 	const requestInfo = useSelector(state => state.project[id].requests[requestId])
-	const [showRenameItemModal, setShowRenameItemModal] = useState(false)
+	const menuEl = useRef(null);
+	const [showRenameModal, setShowRenameModal] = useState(false)
+	const [showAddRequestModal, setShowAddRequestModal] = useState(false)
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const dispatch = useDispatch()
 
 	const handleClickOutside = (event) => {
@@ -121,17 +42,48 @@ export default function FolderItem({ id, requestId, selected, onClick }) {
 		};
 	})
 
-	const onModalRename = (newname) => {
+	const onRenameConfirm = (newname) => {
+		dispatch(renameRequest(id, requestId, newname))
+		setShowRenameModal(false);
 	}
 
-	return (
-		<Container onClick={() => setFolderOpen(prev => !prev)} selected={selected}>
-			{showRenameItemModal && (
+	const onAddRequestConfirm = (name) => {
+		dispatch(addRequest(id, name, requestId))
+		setShowAddRequestModal(false);
+	}
+	
+	const onDeleteConfirm = (input) => {
+		if (input.trim().toLowerCase() === "yes")
+		{
+			dispatch(deleteRequest(id, requestId))
+			setShowDeleteModal(false)
+		}
+	}
+
+	return (<>
+		<CustomContainer onClick={() => setFolderOpen(prev => !prev)} selected={selected} color={requestInfo.color}>
+			{showRenameModal && (
 				<Modal
-					title="Rename Request"
+					title="Rename Folder"
 					buttonTitle="Rename"
-					onDone={onModalRename}
-					onClose={() => setShowRenameItemModal(false)}
+					onDone={onRenameConfirm}
+					onClose={() => setShowRenameModal(false)}
+				/>
+			)}
+			{showAddRequestModal && (
+				<Modal
+					title="Add Request"
+					buttonTitle="Add"
+					onDone={onAddRequestConfirm}
+					onClose={() => setShowAddRequestModal(false)}
+				/>
+			)}
+			{showDeleteModal && (
+				<Modal
+					title="Type 'yes' to confirm delete"
+					buttonTitle="Delete"
+					onDone={onDeleteConfirm}
+					onClose={() => setShowDeleteModal(false)}
 				/>
 			)}
 			<div>
@@ -150,25 +102,26 @@ export default function FolderItem({ id, requestId, selected, onClick }) {
 			</DropdownBtn>
 			{menuOpen && (
 				<DropdownMenu ref={menuEl}>
-					<MenuItem onClick={() => { dispatch(duplicateRequest(id, requestId)); setMenuOpen(false) }}>
+					<MenuItem onClick={() => { setShowAddRequestModal(true) }}>
 						<i className="bi bi-plus-circle-fill"></i>
 						Add Request
 					</MenuItem>
-					<MenuItem onClick={() => setShowRenameItemModal(true)}>
+					<MenuItem onClick={() => setShowRenameModal(true)}>
 						<i className="bi bi-cursor-text"></i>
 						Rename
 					</MenuItem>
-					<MenuItem onClick={() => { dispatch(pinRequest(id, requestId)); setMenuOpen(false) }}>
-						<i className="bi bi-pin-angle"></i>
-						{requestInfo.pinned ? 'Unpin' : 'Pin'}
-					</MenuItem>
 					<MenuDivider />
-					<MenuItem red onClick={() => dispatch(deleteRequest(id, requestId))}>
+					<MenuItem red onClick={() => setShowDeleteModal(true)}>
 						<i className="bi bi-file-earmark-x-fill"></i>
 						Delete
 					</MenuItem>
 				</DropdownMenu>
 			)}
-		</Container>
-	)
+		</CustomContainer>
+		<Inner color={requestInfo.color}>
+			{folderOpen && (<>
+				{requestInfo.requests.map((_, index)=> (<RequestItem id={id} requestId={index} folderId={requestId} key={index} />))}
+			</>)}
+		</Inner>
+	</>)
 }

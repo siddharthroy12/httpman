@@ -6,7 +6,7 @@ import {
 import styled from 'styled-components'
 import Modal from './Modal'
 
-const Container = styled.div`
+export const Container = styled.div`
 	padding: 0.5rem 1rem;
 
 	transition-duration: 0ms !important;
@@ -40,11 +40,11 @@ const Container = styled.div`
 	position: relative;
 `
 
-const Name = styled.p`
+export const Name = styled.p`
 	font-size: 0.9rem;
 `
 
-const Method = styled.p`
+export const Method = styled.p`
 	font-size: 0.8rem;
 	margin-right: 1rem;
 	color: ${(props) => {
@@ -63,7 +63,7 @@ const Method = styled.p`
 	}};
 `
 
-const DropdownBtn = styled.button`
+export const DropdownBtn = styled.button`
 	border: none;
 	background-color: unset;
 	color: #B6B6B6;
@@ -73,7 +73,7 @@ const DropdownBtn = styled.button`
 	}
 `
 
-const PinnedIcon = styled.p`
+export const PinnedIcon = styled.p`
 	color: #B6B6B6;
 	font-size: 0.9rem;
 
@@ -82,7 +82,7 @@ const PinnedIcon = styled.p`
 	}
 `
 
-const DropdownMenu = styled.div`
+export const DropdownMenu = styled.div`
 	position: absolute;
 	right: -10px;
 	top: 2rem;
@@ -96,13 +96,13 @@ const DropdownMenu = styled.div`
 	width: 10rem;
 `
 
-const MenuDivider = styled.hr`
+export const MenuDivider = styled.hr`
 	border: none;
 	border-bottom: 1px solid #3e3e3e;
 	margin: 0.2rem 0;
 `
 
-const MenuItem = styled.button`
+export const MenuItem = styled.button`
 	border: none;
 	background-color: unset;
 	color: ${(props) => props.red ? '#F45866' : 'white'};
@@ -119,10 +119,16 @@ const MenuItem = styled.button`
 	}
 `
 
-export default function RequestItem({ id, requestId, selected, onClick }) {
+export default function RequestItem({ id, requestId, folderId, selected, onClick }) {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const menuEl = useRef(null);
-	const requestInfo = useSelector(state => state.project[id].requests[requestId])
+	const requestInfo = useSelector(state => {
+		if (folderId !== undefined) {
+			return state.project[id].requests[folderId].requests[requestId]
+		} else {
+			return state.project[id].requests[requestId]
+		}
+	})
 	const [showRenameItemModal, setShowRenameItemModal] = useState(false)
 	const dispatch = useDispatch()
 

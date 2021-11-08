@@ -132,14 +132,14 @@ export default function Project({ name , id }) {
 		};
 	})
 
-	const onDeleteConfirm = (name_) => {
-		if (name_ === name) {
+	const onDeleteConfirm = (input) => {
+		if (input.trim().toLoweCase() === 'yes') {
 			dispatch(removeProject(id))
 			setShowDeleteModal(false)
 		}
 	}
 
-	const onRename = (newName) => {
+	const onRenameConfirm = (newName) => {
 		dispatch(renameProject(id, newName))
 		setShowRenameModal(false)
 	}
@@ -152,8 +152,8 @@ export default function Project({ name , id }) {
 	return (<>
 		{showDeleteModal && (<>
 			<Modal
-				title={`Enter '${name}' to confim delete`}
-				buttonTitle="Confirm"
+				title={`Type 'yes' to confim delete`}
+				buttonTitle="Delete"
 				onDone={onDeleteConfirm}
 				onClose={() => setShowDeleteModal(false)}
 			/>
@@ -162,7 +162,7 @@ export default function Project({ name , id }) {
 			<Modal
 				title="Rename Project"
 				buttonTitle="Rename"
-				onDone={onRename}
+				onDone={onRenameConfirm}
 				onClose={() => setShowRenameModal(false)}
 			/>
 		</>)}
