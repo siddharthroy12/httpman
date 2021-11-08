@@ -220,7 +220,9 @@ export default function Project() {
 	const [showAddRequestModal, setShowAddRequestModal] = useState(0) // 0 means no, 1 means request, 2 means folder
 	const [response, setResponse] = useState(null)
 	const [selectedItem, setSelectedItem] = useState(null)
+	const [selectedFolder, setSelectedFolder] = useState(null)
 	const [filter, setFilter] = useState('')
+	let selectedItemState = null
 
 	const handleClickOutside = (event) => {
 		if (addButtonEl.current && !addButtonEl.current.contains(event.target)) {
@@ -288,8 +290,9 @@ export default function Project() {
 		}
 	}
 
-	if (selectedItem !== null && projectState.requests[selectedItem] === undefined) {
-		setSelectedItem(null)
+	const selectSubRequest = (folderId, requestId) => {
+		setSelectedFolder(folderId)
+		setSelectedItem(requestId)
 	}
 
 	return (
@@ -380,7 +383,8 @@ export default function Project() {
 										id={id}
 										requestId={index}
 										selected={index === selectedItem}
-										onClick={() => setSelectedItem(index)}
+										onClick={() => { setSelectedItem(index); setSelectedFolder(null) }}
+										onDelete={() => { setSelectedItem(null)}}
 									/>
 								)
 
@@ -390,6 +394,10 @@ export default function Project() {
 										key={index}
 										id={id}
 										requestId={index}
+										selectedFolder={selectedFolder}
+										selectedRequest={selectedItem}
+										selectRequest={selectSubRequest}
+										onDelete={() => { setSelectedItem(null); setSelectedFolder(null)}}
 									/>
 								)
 

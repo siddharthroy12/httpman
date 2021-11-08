@@ -119,7 +119,7 @@ export const MenuItem = styled.button`
 	}
 `
 
-export default function RequestItem({ id, requestId, folderId, selected, onClick }) {
+export default function RequestItem({ id, requestId, folderId, selected, onClick, onDelete }) {
 	const [menuOpen, setMenuOpen] = useState(false)
 	const menuEl = useRef(null);
 	const requestInfo = useSelector(state => {
@@ -175,7 +175,7 @@ export default function RequestItem({ id, requestId, folderId, selected, onClick
 				/>
 			</DropdownBtn>
 			{menuOpen && (
-				<DropdownMenu ref={menuEl}>
+				<DropdownMenu ref={menuEl} onClick={e => e.stopPropagation()}>
 					<MenuItem onClick={() => setShowRenameItemModal(true)}>
 						<i className="bi bi-cursor-text"></i>
 						Rename
@@ -189,7 +189,7 @@ export default function RequestItem({ id, requestId, folderId, selected, onClick
 						{requestInfo.pinned ? 'Unpin' : 'Pin'}
 					</MenuItem>
 					<MenuDivider />
-					<MenuItem red onClick={() => dispatch(deleteRequest(id, requestId))}>
+					<MenuItem red onClick={() => { dispatch(deleteRequest(id, requestId)); onDelete(); setMenuOpen(false)}}>
 						<i className="bi bi-file-earmark-x-fill"></i>
 						Delete
 					</MenuItem>
