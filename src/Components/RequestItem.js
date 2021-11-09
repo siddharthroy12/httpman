@@ -146,7 +146,7 @@ export default function RequestItem({ id, requestId, folderId, selected, onClick
 	})
 
 	const onModalRename = (newname) => {
-		dispatch(renameRequest(id, requestId, newname))
+		dispatch(renameRequest(id, requestId, folderId, newname))
 		setShowRenameItemModal(false)
 	}
 
@@ -176,20 +176,20 @@ export default function RequestItem({ id, requestId, folderId, selected, onClick
 			</DropdownBtn>
 			{menuOpen && (
 				<DropdownMenu ref={menuEl} onClick={e => e.stopPropagation()}>
-					<MenuItem onClick={() => setShowRenameItemModal(true)}>
+					<MenuItem onClick={() => { setShowRenameItemModal(true); setMenuOpen(false)}}>
 						<i className="bi bi-cursor-text"></i>
 						Rename
 					</MenuItem>
-					<MenuItem onClick={() => { dispatch(duplicateRequest(id, requestId)); setMenuOpen(false) }}>
+					<MenuItem onClick={() => { dispatch(duplicateRequest(id, requestId, folderId)); setMenuOpen(false) }}>
 						<i className="bi bi-files"></i>
 						Duplicate
 					</MenuItem>
-					<MenuItem onClick={() => { dispatch(pinRequest(id, requestId)); setMenuOpen(false) }}>
+					<MenuItem onClick={() => { dispatch(pinRequest(id, requestId, folderId)); setMenuOpen(false) }}>
 						<i className="bi bi-pin-angle"></i>
 						{requestInfo.pinned ? 'Unpin' : 'Pin'}
 					</MenuItem>
 					<MenuDivider />
-					<MenuItem red onClick={() => { dispatch(deleteRequest(id, requestId)); onDelete(); setMenuOpen(false)}}>
+					<MenuItem red onClick={() => { dispatch(deleteRequest(id, requestId, folderId)); onDelete(); setMenuOpen(false)}}>
 						<i className="bi bi-file-earmark-x-fill"></i>
 						Delete
 					</MenuItem>

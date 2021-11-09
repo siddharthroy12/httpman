@@ -224,6 +224,9 @@ export default function Project() {
 	const [filter, setFilter] = useState('')
 	let selectedItemState = null
 
+	selectedItemState = selectedFolder !== null ? projectState.requests[selectedFolder].requests[selectedItem] :
+			selectedItem !== null ? projectState.requests[selectedItem] : null
+
 	const handleClickOutside = (event) => {
 		if (addButtonEl.current && !addButtonEl.current.contains(event.target)) {
 			setShowAddButtonMenu(false)
@@ -237,182 +240,201 @@ export default function Project() {
 		document.addEventListener('click', handleClickOutside, true);
 		return () => {
 			document.removeEventListener('click', handleClickOutside, true);
-		};
+	};
+})
+
+const onAddRequestConfirm = (name) => {
+	dispatch(showAddRequestModal === 1 ? addRequest(id, name): addFolder(id, name))
+	setShowAddRequestModal(0)
+}
+
+const sendRequest = async () => {
+	let res
+	let headers = {}
+	const body = JSON.parse(projectState.requests[selectedItem].textBody)
+	const method = projectState.requests[selectedItem].method 
+
+	projectState.requests[selectedItem].headers.forEach(header => {
+		if (header.name.trim() !== '' && header.value.trim() !== '') {
+			headers[header.name] = header.value
+		}
 	})
 
-	const onAddRequestConfirm = (name) => {
-		dispatch(showAddRequestModal === 1 ? addRequest(id, name): addFolder(id, name))
-		setShowAddRequestModal(0)
+	if (method === "POST" || method === "PUT") {
+		headers["content-type"] = "application/json"
 	}
 
-	const sendRequest = async () => {
-		let res
-		let headers = {}
-		const body = JSON.parse(projectState.requests[selectedItem].textBody)
-		const method = projectState.requests[selectedItem].method 
-
-		projectState.requests[selectedItem].headers.forEach(header => {
-			if (header.name.trim() !== '' && header.value.trim() !== '') {
-				headers[header.name] = header.value
+	try {
+		switch(projectState.requests[selectedItem].method) {
+			case 'GET':
+				res =	await axios.get(getFullUrl(projectState.requests[selectedItem]), { headers })
+				setResponse(res)
+				break;
+			case 'POST':
+				res = await axios.post(getFullUrl(projectState.requests[selectedItem]), body, { headers })
+				setResponse(res)
+				break;
+			case 'PUT':
+				res = await axios.put(getFullUrl(projectState.requests[selectedItem]), body, { headers })
+				setResponse(res)
+				break;
+			case 'DELETE':
+				res = await axios.delete(getFullUrl(projectState.requests[selectedItem]))
+				setResponse(res)
+				break;
+			default:
+				break;
 			}
-		})
-
-		if (method === "POST" || method === "PUT") {
-			headers["content-type"] = "application/json"
+	} catch (error) {
+		if (error.response) {
+			setResponse(error.response)
 		}
-
-		try {
-			switch(projectState.requests[selectedItem].method) {
-				case 'GET':
-					res =	await axios.get(getFullUrl(projectState.requests[selectedItem]), { headers })
-					setResponse(res)
-					break;
-				case 'POST':
-					res = await axios.post(getFullUrl(projectState.requests[selectedItem]), body, { headers })
-					setResponse(res)
-					break;
-				case 'PUT':
-					res = await axios.put(getFullUrl(projectState.requests[selectedItem]), body, { headers })
-					setResponse(res)
-					break;
-				case 'DELETE':
-					res = await axios.delete(getFullUrl(projectState.requests[selectedItem]))
-					setResponse(res)
-					break;
-				default:
-					break;
-				}
-		} catch (error) {
-			if (error.response) {
-				setResponse(error.response)
-			}
-			console.log(error)
-		}
+		console.log(error)
 	}
+}
 
-	const selectSubRequest = (folderId, requestId) => {
-		setSelectedFolder(folderId)
-		setSelectedItem(requestId)
-	}
+const selectSubRequest = (folderId, requestId) => {
+	setSelectedFolder(folderId)
+	setSelectedItem(requestId)
+}
 
-	return (
-		<Container>
-			{showAddRequestModal !== 0 && (
-				<Modal
-					title={showAddRequestModal === 1 ? "New Request" : "New Folder"}
-					buttonTitle="Create"
-					onDone={onAddRequestConfirm}
-					onClose={() => setShowAddRequestModal(0)}
-				/>
-			)}
-			<Sidebar>
-				<SidebarTop>
-					<TextInput placeholder="Filter" value={filter} onChange={(e) => setFilter(e.target.value)}/>
-					<AddButton onClick={() => setShowAddButtonMenu(prev => !prev)} ref={addButtonEl}>
-						<i
-							className="bi bi-caret-down-fill"
-							style={{
-								color: 'rgb(225, 225, 225)'
-							}}
-						/>
-						<i
-							className="bi bi-plus-circle-fill"
-							style={{
-								color: 'rgb(225, 225, 225)'
-							}}
-						/>
-						{showAddButtonMenu && (
-							<AddButtonMenu>
-								<MenuItem onClick={() => setShowAddRequestModal(1)}>
-									<i
-										className="bi bi-plus-circle-fill"
-										style={{
-											color: 'rgb(225, 225, 225)',
-											marginRight: '1rem'
-										}}
+console.log({selectedItemState});
+
+return (
+	<Container>
+		{showAddRequestModal !== 0 && (
+			<Modal
+				title={showAddRequestModal === 1 ? "New Request" : "New Folder"}
+				buttonTitle="Create"
+				onDone={onAddRequestConfirm}
+				onClose={() => setShowAddRequestModal(0)}
+			/>
+		)}
+		<Sidebar>
+			<SidebarTop>
+				<TextInput placeholder="Filter" value={filter} onChange={(e) => setFilter(e.target.value)}/>
+				<AddButton onClick={() => setShowAddButtonMenu(prev => !prev)} ref={addButtonEl}>
+					<i
+						className="bi bi-caret-down-fill"
+						style={{
+							color: 'rgb(225, 225, 225)'
+						}}
+					/>
+					<i
+						className="bi bi-plus-circle-fill"
+						style={{
+							color: 'rgb(225, 225, 225)'
+						}}
+					/>
+					{showAddButtonMenu && (
+						<AddButtonMenu>
+							<MenuItem onClick={() => setShowAddRequestModal(1)}>
+								<i
+									className="bi bi-plus-circle-fill"
+									style={{
+										color: 'rgb(225, 225, 225)',
+										marginRight: '1rem'
+									}}
+								/>
+								Add Request
+							</MenuItem>
+							<MenuItem onClick={() => setShowAddRequestModal(2)}>
+								<i
+									className="bi bi-folder-fill"
+									style={{
+										color: 'rgb(225, 225, 225)',
+										marginRight: '1rem'
+									}}
+								/>
+								Add Folder
+							</MenuItem>
+						</AddButtonMenu>
+					)}
+				</AddButton>
+			</SidebarTop>
+			<SidebarBottom>
+			{Object.keys(projectState.requests).map(index => {
+					const item = projectState.requests[index]
+					
+					if (item.type === "REQUEST" && item.pinned) {
+						return (
+							<RequestItem
+								key={index}
+								id={id}
+								requestId={index}
+								selected={false}
+								onClick={() => { setSelectedItem(index); setSelectedFolder(null)}}
+							/>
+						)
+					} else if (item.type === "FOLDER") {
+						return Object.keys(projectState.requests[index].requests).map(subIndex => {
+							const subItem = projectState.requests[index].requests[subIndex]
+
+							if (subItem.pinned) {
+								return (
+									<RequestItem
+										key={index+subIndex} // Idk if thats a good idea
+										id={id}
+										requestId={subIndex}
+										folderId={index}
+										selected={false}
+										onClick={() => {setSelectedItem(subIndex); setSelectedFolder(index)}}
 									/>
-									Add Request
-								</MenuItem>
-								<MenuItem onClick={() => setShowAddRequestModal(2)}>
-									<i
-										className="bi bi-folder-fill"
-										style={{
-											color: 'rgb(225, 225, 225)',
-											marginRight: '1rem'
-										}}
-									/>
-									Add Folder
-								</MenuItem>
-							</AddButtonMenu>
-						)}
-					</AddButton>
-				</SidebarTop>
-				<SidebarBottom>
+								)
+							}
+							return null
+						})
+					}
+					return null
+				})}
+				{projectState.requests.filter((item) => item.pinned).length > 0 && (<Divider />)}
 				{Object.keys(projectState.requests).map(index => {
-						const item = projectState.requests[index]
-						
-						if (item.type === "REQUEST" && item.pinned) {
+					const item = projectState.requests[index]
+
+					if (filter.trim() !== '') {
+						if (!searchString(filter, item.name)) {
+							return null
+						}
+					}
+
+					switch (item.type) {
+						case "REQUEST":
 							return (
 								<RequestItem
 									key={index}
 									id={id}
 									requestId={index}
-									selected={false}
-									onClick={() => setSelectedItem(index)}
+									selected={index === selectedItem && selectedFolder === null}
+									onClick={() => { setSelectedItem(index); setSelectedFolder(null) }}
+									onDelete={() => { setSelectedItem(null)}}
 								/>
 							)
-						} else {
-							return null
-						}
-					})}
-					{projectState.requests.filter((item) => item.pinned).length > 0 && (<Divider />)}
-					{Object.keys(projectState.requests).map(index => {
-						const item = projectState.requests[index]
 
-						if (filter.trim() !== '') {
-							if (!searchString(filter, item.name)) {
-								return null
-							}
-						}
+						case "FOLDER":
+							return (
+								<FolderItem
+									key={index}
+									id={id}
+									requestId={index}
+									selectedFolder={selectedFolder}
+									selectedRequest={selectedItem}
+									selectRequest={selectSubRequest}
+									onDelete={() => { setSelectedItem(null); setSelectedFolder(null)}}
+								/>
+							)
 
-						switch (item.type) {
-							case "REQUEST":
-								return (
-									<RequestItem
-										key={index}
-										id={id}
-										requestId={index}
-										selected={index === selectedItem}
-										onClick={() => { setSelectedItem(index); setSelectedFolder(null) }}
-										onDelete={() => { setSelectedItem(null)}}
-									/>
-								)
-
-							case "FOLDER":
-								return (
-									<FolderItem
-										key={index}
-										id={id}
-										requestId={index}
-										selectedFolder={selectedFolder}
-										selectedRequest={selectedItem}
-										selectRequest={selectSubRequest}
-										onDelete={() => { setSelectedItem(null); setSelectedFolder(null)}}
-									/>
-								)
-
-							default:
-								break
-						}
-						return null
-					})}
-				</SidebarBottom>
-			</Sidebar>
-			<Center>
-				<Top>
-					{selectedItem && projectState.requests[selectedItem] !== undefined && (<>
-						<MethodBtn method={projectState.requests[selectedItem].method} onClick={() => setShowMethodButtonMenu(prev => !prev)}>
-							{projectState.requests[selectedItem].method}
+						default:
+							break
+					}
+					return null
+				})}
+			</SidebarBottom>
+		</Sidebar>
+		<Center>
+			<Top>
+					{(selectedItemState !== null) && (<>
+						<MethodBtn method={selectedItemState.method} onClick={() => setShowMethodButtonMenu(prev => !prev)}>
+							{selectedItemState.method}
 							<i className="bi bi-caret-down-fill" />
 						</MethodBtn>
 						{ showMethodButtonMenu && (<>
@@ -425,7 +447,7 @@ export default function Project() {
 						</>)}
 						<UrlInput
 							placeholder="https://localhost:400/api/login"
-							value={projectState.requests[selectedItem].url}
+							value={selectedItemState.url}
 							onChange={(event) => dispatch(updateRequest(id, selectedItem, event.target.value))}
 						/>
 						<SendRequestBtn onClick={sendRequest}>
@@ -434,7 +456,7 @@ export default function Project() {
 					</>)}
 				</Top>
 				<div>
-					{selectedItem && projectState.requests[selectedItem] !== undefined && (<>
+					{selectedItemState && (<>
 						<BodyInput id={id} requestId={selectedItem} />
 					</>)}
 				</div>

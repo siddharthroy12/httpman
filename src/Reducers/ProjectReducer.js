@@ -115,20 +115,38 @@ export const ProjectReducer = (state = {}, action) => {
 			return stateCopy;
 
 		case DELETE_REQUEST:
-			stateCopy[action.payload.id].requests.splice(action.payload.requestId, 1)
+			if (action.payload.folderId !== null && action.payload.folderId !== undefined) {
+				stateCopy[action.payload.id].requests[action.payload.folderId].requests.splice(action.payload.requestId, 1)
+			} else {
+				stateCopy[action.payload.id].requests.splice(action.payload.requestId, 1)
+			}
 			return stateCopy
 
 		case RENAME_REQUEST:
-			stateCopy[action.payload.id].requests[action.payload.requestId].name = action.payload.newName
+			if (action.payload.folderId !== null && action.payload.folderId !== undefined) {
+				stateCopy[action.payload.id].requests[action.payload.folderId].requests[action.payload.requestId].name = action.payload.newName
+			} else {
+				stateCopy[action.payload.id].requests[action.payload.requestId].name = action.payload.newName
+			}
 			return stateCopy
 
 		case PIN_REQUEST:
-			stateCopy[action.payload.id].requests[action.payload.requestId].pinned = !stateCopy[action.payload.id].requests[action.payload.requestId].pinned
+			if (action.payload.folderId !== null && action.payload.folderId !== undefined) {
+				stateCopy[action.payload.id].requests[action.payload.folderId].requests[action.payload.requestId].pinned =
+						!stateCopy[action.payload.id].requests[action.payload.folderId].requests[action.payload.requestId].pinned
+			} else {
+				stateCopy[action.payload.id].requests[action.payload.requestId].pinned = !stateCopy[action.payload.id].requests[action.payload.requestId].pinned
+			}
 			return stateCopy
 
 		case DUPLICATE_REQUEST:
-			let requestCopy = { ...stateCopy[action.payload.id].requests[action.payload.requestId] }
-			stateCopy[action.payload.id].requests.push(requestCopy)
+			if (action.payload.folderId !== null && action.payload.folderId !== undefined) {
+				let requestCopy = { ...stateCopy[action.payload.id].requests[action.payload.folderId].requests[action.payload.requestId] }
+				stateCopy[action.payload.id].requests[action.payload.folderId].requests.push(requestCopy)
+			} else {
+				let requestCopy = { ...stateCopy[action.payload.id].requests[action.payload.requestId] }
+				stateCopy[action.payload.id].requests.push(requestCopy)
+			}
 			return stateCopy
 
 		case ADD_FOLDER:

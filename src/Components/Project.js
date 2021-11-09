@@ -133,7 +133,7 @@ export default function Project({ name , id }) {
 	})
 
 	const onDeleteConfirm = (input) => {
-		if (input.trim().toLoweCase() === 'yes') {
+		if (input.trim().toLowerCase() === 'yes') {
 			dispatch(removeProject(id))
 			setShowDeleteModal(false)
 		}

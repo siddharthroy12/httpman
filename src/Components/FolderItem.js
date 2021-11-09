@@ -5,7 +5,7 @@ import {
 } from '../Actions/ProjectActions'
 import Modal from './Modal'
 import {
-	Container, Name, DropdownBtn, PinnedIcon, DropdownMenu,
+	Container, Name, DropdownBtn, DropdownMenu,
 	MenuDivider, MenuItem
 } from './RequestItem'
 import RequestItem from './RequestItem'
@@ -43,7 +43,7 @@ export default function FolderItem({ id, requestId, selectRequest, selectedFolde
 	})
 
 	const onRenameConfirm = (newname) => {
-		dispatch(renameRequest(id, requestId, newname))
+		dispatch(renameRequest(id, requestId, null, newname))
 		setShowRenameModal(false);
 	}
 
@@ -95,11 +95,6 @@ export default function FolderItem({ id, requestId, selectRequest, selectedFolde
 				<i className={"bi bi-folder2" + (folderOpen ? "-open" : "")} style={{marginRight: '1rem'}}></i>
 				<Name>{requestInfo.name}</Name>
 			</div>
-			{requestInfo.pinned && (<PinnedIcon>
-				<i
-					className="bi bi-pin-fill"
-				/>
-			</PinnedIcon>)}
 			<DropdownBtn onClick={() => setMenuOpen(prev => !prev)}>
 				<i
 					className="bi bi-caret-down-fill"

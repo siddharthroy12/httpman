@@ -59,41 +59,43 @@ export const updateRequest = (id, requestId, url, method, queries, headers, body
 	})
 }
 
-export const deleteRequest = (id, requestId) => async (dispatch) => {
+export const deleteRequest = (id, requestId, folderId) => async (dispatch) => {
 	dispatch({
 		type: DELETE_REQUEST,
 		payload: {
 			id,
-			requestId
+			requestId,
+			folderId
 		}
 	})
 }
 
-export const renameRequest = (id, requestId, newName) => async (dispatch) => {
+export const renameRequest = (id, requestId, folderId, newName) => async (dispatch) => {
 	dispatch({
 		type: RENAME_REQUEST,
 		payload: {
 			id,
 			requestId,
+			folderId,
 			newName
 		}
 	})
 }
 
-export const pinRequest = (id, requestId) => async (dispatch) => {
+export const pinRequest = (id, requestId, folderId) => async (dispatch) => {
 	dispatch({
 		type: PIN_REQUEST,
 		payload: {
-			id, requestId
+			id, requestId, folderId
 		}
 	})
 }
 
-export const duplicateRequest = (id, requestId) => async (dispatch) => {
+export const duplicateRequest = (id, requestId, folderId) => async (dispatch) => {
 	dispatch({
 		type: DUPLICATE_REQUEST,
 		payload: {
-			id, requestId
+			id, requestId, folderId
 		}
 	})
 }
