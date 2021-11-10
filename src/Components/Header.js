@@ -96,10 +96,10 @@ export default function Header() {
 				<Spacer />
 				<RightSide>
 					<SourceLink href="https://github.com/siddharthroy12/httpman" target="_blank">
-						<i className="bi bi-github" style={{width: '24px', height: '28px'}}></i>
+						<i className="bi bi-github" style={{width: '24px', height: '30px'}}></i>
 					</SourceLink>
 					<AboutButton onClick={() => setShowAbout(prev => !prev)}>
-					<i className="bi bi-info-circle"></i>
+						<i className="bi bi-info-circle" style={{height: '30px' }}></i>
 				</AboutButton>
 			</RightSide>
 			</Container>

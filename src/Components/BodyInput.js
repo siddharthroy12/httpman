@@ -45,7 +45,7 @@ const BottomContainer = styled.div`
 const Editor = styled(AceEditor)`
 	width: 100% !important;
 	height: 100% !important;
-	font-size: 1rem !important;
+	font-size: 0.9rem !important;
 `
 
 const TabSection = styled.div`
