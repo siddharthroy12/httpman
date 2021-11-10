@@ -155,7 +155,7 @@ export default function Dashboard() {
 			</Center>)}
 			<StatusBar>
 				<p>{Object.keys(projects).length} Projects</p>
-				<p>Version: 0.0.3</p>
+				<p>Version: 0.0.4</p>
 			</StatusBar>
 		</Container>
 	)
