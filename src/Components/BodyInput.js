@@ -35,6 +35,7 @@ const TabContainerSpace = styled.div`
 
 const BottomContainer = styled.div`
 	height: calc(100vh - 9rem);
+	overflow: scroll;
 
 	* {
 		transition-duration: 0s;
@@ -49,8 +50,6 @@ const Editor = styled(AceEditor)`
 
 const TabSection = styled.div`
 	padding: 1rem;
-	height: 100%;
-	position: relative;
 `
 
 const Label = styled.p`
@@ -73,7 +72,6 @@ const QueryList = styled.div`
 `
 
 const HeaderList = styled.div`
-	height: calc(100% - 2rem)
 `
 
 const TabSectionBottom = styled.div`
@@ -81,7 +79,7 @@ const TabSectionBottom = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	position: absolute;
+	position: sticky;
 	bottom: 1rem;
 	right: 1rem;
 	width: 100%;
@@ -93,27 +91,35 @@ const Tabs = {
 	HEADER: 3
 }
 
-export default function BodyInput({id, requestId}) {
+export default function BodyInput({id, requestId, folderId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
-	const projectState = useSelector(state => state.project[id])
+
+	const requestState = useSelector(state => {
+		if (folderId !== undefined && folderId !== null) {
+			return state.project[id].requests[folderId].requests[requestId]
+		} else {
+			return state.project[id].requests[requestId]
+		}
+	})
+
 	const dispatch = useDispatch()
 
 	const addQuery = () => {
-		let updatedQueries = [...projectState.requests[requestId].queries]	
+		let updatedQueries = [...requestState.queries]
 		updatedQueries.push({ name: '', value: ''})
 
-		dispatch(updateRequest(id, requestId, null, null, updatedQueries)) 
+		dispatch(updateRequest(id, requestId, folderId, null, null, updatedQueries)) 
 	}
 
 	const addHeader = () => {
-		let updatedHeaders = [...projectState.requests[requestId].headers]
+		let updatedHeaders = [...requestState.headers]
 		updatedHeaders.push({ name: '', value: ''})
 
-		dispatch(updateRequest(id, requestId, null, null, null, updatedHeaders))
+		dispatch(updateRequest(id, requestId, folderId, null, null, null, updatedHeaders))
 	}
 
 	const updateTextBody = (value) => {
-	dispatch(updateRequest(id, requestId, null, null, null, null, null, value))
+	dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, value))
 	}
 	
 	return (
@@ -136,37 +142,41 @@ export default function BodyInput({id, requestId}) {
 						mode="json"
 						theme="monokai"
 						onChange={updateTextBody}
-						value={projectState.requests[requestId].textBody}
+						value={requestState.textBody}
 					/>
 				)}
 				{ selectedTab === Tabs.QUERY && (
 					<TabSection>
 						<Label>URL PREVIEW</Label>
 						<UrlPreview>
-							{projectState.requests[requestId].url}
-							{generateQueryString(projectState.requests[requestId].queries)}
+							{requestState.url}
+							{generateQueryString(requestState.queries)}
 						</UrlPreview>
 						<QueryList>
-							{projectState.requests[requestId].queries.map((_, index) => {
-								return <PairInput key={index} id={id} requestId={requestId} index={index} isQuery/>	
+							{requestState.queries.map((_, index) => {
+								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} isQuery />
 							})}
 						</QueryList>
-						<TabSectionBottom>
-							<Button onClick={() => addQuery()}>Add</Button>
-						</TabSectionBottom>
 					</TabSection>
+				)}
+				{ selectedTab === Tabs.QUERY && (
+					<TabSectionBottom>
+						<Button onClick={() => addQuery()}>Add</Button>
+					</TabSectionBottom>
 				)}
 				{ selectedTab === Tabs.HEADER && (
 					<TabSection>
 						<HeaderList>
-							{projectState.requests[requestId].headers.map((_, index) => {
-								return <PairInput key={index} id={id} requestId={requestId} index={index} />	
+							{requestState.headers.map((_, index) => {
+								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} />	
 							})}
 						</HeaderList>
-						<TabSectionBottom>
-							<Button onClick={() => addHeader()}>Add</Button>
-						</TabSectionBottom>
 					</TabSection>
+				)}
+				{ selectedTab === Tabs.HEADER && (
+					<TabSectionBottom>
+						<Button onClick={() => addHeader()}>Add</Button>
+					</TabSectionBottom>
 				)}
 			</BottomContainer>
 		</div>

@@ -37,6 +37,8 @@ const SidebarTop = styled(Top)`
 
 const SidebarBottom = styled.div`
 	padding-top: 0.5rem;
+	height: calc(100vh - 6.5rem);
+	overflow: scroll;
 `
 
 const TextInput = styled.input`
@@ -189,6 +191,9 @@ const SendRequestBtn = styled.button`
 	}
 `
 
+const RequestsContainer = styled.div`
+`
+
 const StatusBlock = styled.p`
 	background-color: ${(props) => {
 		if (props.status < 200) { // 1xx status codes 
@@ -243,64 +248,67 @@ export default function Project() {
 	};
 })
 
-const onAddRequestConfirm = (name) => {
-	dispatch(showAddRequestModal === 1 ? addRequest(id, name): addFolder(id, name))
-	setShowAddRequestModal(0)
-}
-
-const sendRequest = async () => {
-	let res
-	let headers = {}
-	const body = JSON.parse(projectState.requests[selectedItem].textBody)
-	const method = projectState.requests[selectedItem].method 
-
-	projectState.requests[selectedItem].headers.forEach(header => {
-		if (header.name.trim() !== '' && header.value.trim() !== '') {
-			headers[header.name] = header.value
-		}
-	})
-
-	if (method === "POST" || method === "PUT") {
-		headers["content-type"] = "application/json"
+	const onAddRequestConfirm = (name) => {
+		dispatch(showAddRequestModal === 1 ? addRequest(id, name): addFolder(id, name))
+		setShowAddRequestModal(0)
 	}
 
-	try {
-		switch(projectState.requests[selectedItem].method) {
-			case 'GET':
-				res =	await axios.get(getFullUrl(projectState.requests[selectedItem]), { headers })
-				setResponse(res)
-				break;
-			case 'POST':
-				res = await axios.post(getFullUrl(projectState.requests[selectedItem]), body, { headers })
-				setResponse(res)
-				break;
-			case 'PUT':
-				res = await axios.put(getFullUrl(projectState.requests[selectedItem]), body, { headers })
-				setResponse(res)
-				break;
-			case 'DELETE':
-				res = await axios.delete(getFullUrl(projectState.requests[selectedItem]))
-				setResponse(res)
-				break;
-			default:
-				break;
+	const sendRequest = async () => {
+		let res
+		let headers = {}
+		let body = {}
+		try {
+			body = JSON.parse(selectedItemState.textBody)
+		} catch(e) {
+			body = {}
+		}
+		const method = selectedItemState.method
+
+		selectedItemState.headers.forEach(header => {
+			if (header.name.trim() !== '' && header.value.trim() !== '') {
+				headers[header.name] = header.value
 			}
-	} catch (error) {
-		if (error.response) {
-			setResponse(error.response)
+		})
+	
+		if (method === "POST" || method === "PUT") {
+			headers["content-type"] = "application/json"
 		}
-		console.log(error)
+	
+		try {
+			switch(selectedItemState.method) {
+				case 'GET':
+					res =	await axios.get(getFullUrl(selectedItemState), { headers })
+					setResponse(res)
+					break;
+				case 'POST':
+					res = await axios.post(getFullUrl(selectedItemState), body, { headers })
+					setResponse(res)
+					break;
+				case 'PUT':
+					res = await axios.put(getFullUrl(selectedItemState), body, { headers })
+					setResponse(res)
+					break;
+				case 'DELETE':
+					res = await axios.delete(getFullUrl(selectedItemState))
+					setResponse(res)
+					break;
+				default:
+					break;
+				}
+		} catch (error) {
+			if (error.response) {
+				setResponse(error.response)
+			}
+			console.log(error)
+		}
 	}
-}
 
-const selectSubRequest = (folderId, requestId) => {
-	setSelectedFolder(folderId)
-	setSelectedItem(requestId)
-}
+	const selectSubRequest = (folderId, requestId) => {
+		setSelectedFolder(folderId)
+		setSelectedItem(requestId)
+	}
 
-console.log({selectedItemState});
-
-return (
+	return (
 	<Container>
 		{showAddRequestModal !== 0 && (
 			<Modal
@@ -353,6 +361,7 @@ return (
 				</AddButton>
 			</SidebarTop>
 			<SidebarBottom>
+			<RequestsContainer>
 			{Object.keys(projectState.requests).map(index => {
 					const item = projectState.requests[index]
 					
@@ -428,6 +437,7 @@ return (
 					}
 					return null
 				})}
+				</RequestsContainer>
 			</SidebarBottom>
 		</Sidebar>
 		<Center>
@@ -439,16 +449,16 @@ return (
 						</MethodBtn>
 						{ showMethodButtonMenu && (<>
 							<MethodBtnMenu ref={methodMenuEl}>
-								<MenuItem method="GET" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'GET')); setShowMethodButtonMenu(false) } }>GET</MenuItem>
-								<MenuItem method="POST" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'POST')); setShowMethodButtonMenu(false) } }>POST</MenuItem>
-								<MenuItem method="PATCH" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'PATCH')); setShowMethodButtonMenu(false) } }>PATCH</MenuItem>
-								<MenuItem method="DELETE" onClick={() => { dispatch(updateRequest(id, selectedItem, null, 'DELETE')); setShowMethodButtonMenu(false) } }>DELETE</MenuItem>
+								<MenuItem method="GET" onClick={() => { dispatch(updateRequest(id, selectedItem, selectedFolder, null, 'GET')); setShowMethodButtonMenu(false) } }>GET</MenuItem>
+								<MenuItem method="POST" onClick={() => { dispatch(updateRequest(id, selectedItem, selectedFolder, null, 'POST')); setShowMethodButtonMenu(false) } }>POST</MenuItem>
+								<MenuItem method="PATCH" onClick={() => { dispatch(updateRequest(id, selectedItem, selectedFolder, null, 'PATCH')); setShowMethodButtonMenu(false) } }>PATCH</MenuItem>
+								<MenuItem method="DELETE" onClick={() => { dispatch(updateRequest(id, selectedItem, selectedFolder, null, 'DELETE')); setShowMethodButtonMenu(false) } }>DELETE</MenuItem>
 							</MethodBtnMenu>
 						</>)}
 						<UrlInput
 							placeholder="https://localhost:400/api/login"
 							value={selectedItemState.url}
-							onChange={(event) => dispatch(updateRequest(id, selectedItem, event.target.value))}
+							onChange={(event) => dispatch(updateRequest(id, selectedItem, selectedFolder, event.target.value))}
 						/>
 						<SendRequestBtn onClick={sendRequest}>
 							Send
@@ -457,7 +467,7 @@ return (
 				</Top>
 				<div>
 					{selectedItemState && (<>
-						<BodyInput id={id} requestId={selectedItem} />
+						<BodyInput id={id} requestId={selectedItem} folderId={selectedFolder} />
 					</>)}
 				</div>
 			</Center>

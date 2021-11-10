@@ -31,22 +31,30 @@ const DeleteBtn = styled.button`
 	padding: 0;
 `
 
-export default function QueryInput({id, requestId, index, isQuery}) {
+export default function QueryInput({id, requestId, folderId, index, isQuery}) {
 	const dispatch = useDispatch()
-	const projectState = useSelector(state => state.project[id])
-	const queries = projectState.requests[requestId].queries
-	const headers = projectState.requests[requestId].headers
-	const name = isQuery ? queries[index].name : headers[index].name 
-	const value = isQuery ? queries[index].value : headers[index].value 
+
+	const requestState = useSelector(state => {
+		if (folderId !== undefined && folderId !== null) {
+			return state.project[id].requests[folderId].requests[requestId]
+		} else {
+			return state.project[id].requests[requestId]
+		}
+	})
+
+	const queries = requestState.queries
+	const headers = requestState.headers
+	const name = isQuery ? queries[index].name : headers[index].name
+	const value = isQuery ? queries[index].value : headers[index].value
 
 	const updateName = (event) => {
 		let copy = isQuery ? [...queries] : [...headers]
 		copy[index].name = event.target.value
 
 		if (isQuery) { 
-			dispatch(updateRequest(id, requestId, null, null, copy))		
+			dispatch(updateRequest(id, requestId, folderId, null, null, copy))
 		} else {
-			dispatch(updateRequest(id, requestId, null, null, null, copy))
+			dispatch(updateRequest(id, requestId, folderId, null, null, null, copy))
 		}
 	}
 
@@ -55,9 +63,9 @@ export default function QueryInput({id, requestId, index, isQuery}) {
 		copy[index].value = event.target.value
 
 		if (isQuery) { 
-			dispatch(updateRequest(id, requestId, null, null, copy))		
+			dispatch(updateRequest(id, requestId, folderId, null, null, copy))		
 		} else {
-			dispatch(updateRequest(id, requestId, null, null, null, copy))
+			dispatch(updateRequest(id, requestId,folderId, null, null, null, copy))
 		}
 	}
 
@@ -67,9 +75,9 @@ export default function QueryInput({id, requestId, index, isQuery}) {
 		copy = copy.filter((_, i) => i !== index)
 
 		if (isQuery) { 
-			dispatch(updateRequest(id, requestId, null, null, copy))		
+			dispatch(updateRequest(id, requestId, folderId, null, null, copy))		
 		} else {
-			dispatch(updateRequest(id, requestId, null, null, null, copy))
+			dispatch(updateRequest(id, requestId, folderId, null, null, null, copy))
 		}
 	}
 

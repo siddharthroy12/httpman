@@ -49,11 +49,11 @@ export const addRequest = (id, name, folderId) => async (dispatch) => {
 	})
 }
 
-export const updateRequest = (id, requestId, url, method, queries, headers, bodyType, textBody, structuredBody) => async (dispatch) => {
+export const updateRequest = (id, requestId, folderId, url, method, queries, headers, bodyType, textBody, structuredBody) => async (dispatch) => {
 	dispatch({
 		type: UPDATE_REQUEST,
 		payload: {
-			id, requestId,
+			id, requestId, folderId,
 			url, method, queries, headers, bodyType, textBody, structuredBody
 		}
 	})

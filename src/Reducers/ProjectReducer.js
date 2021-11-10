@@ -19,6 +19,8 @@ export const ProjectReducer = (state = {}, action) => {
 	let stateCopy = JSON.parse(JSON.stringify(state))
 	// For creating new projects
 	let id = 0
+	// For creating and updating
+	let request = null
 
 	// Update lastTouched whenever working with a project
 	if (action.payload?.id !== undefined && action.type !== DUPLICATE_PROJECT) {
@@ -62,7 +64,7 @@ export const ProjectReducer = (state = {}, action) => {
 			return stateCopy
 
 		case ADD_REQUEST:
-			const request = {
+			request = {
 				type: 'REQUEST',
 				name: action.payload.name,
 				method: 'GET',
@@ -84,34 +86,27 @@ export const ProjectReducer = (state = {}, action) => {
 			return stateCopy
 
 		case UPDATE_REQUEST:
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.url = ((action.payload.url !== null) && action.payload.url !== undefined) ?
-						action.payload.url : stateCopy[action.payload.id].requests[action.payload.requestId].url
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.method = ((action.payload.method !== null) && action.payload.method !== undefined) ?
-						action.payload.method : stateCopy[action.payload.id].requests[action.payload.requestId].method
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.queries = ((action.payload.queries !== null) && action.payload.queries !== undefined) ?
-						action.payload.queries : stateCopy[action.payload.id].requests[action.payload.requestId].queries
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.headers = ((action.payload.headers !== null) && action.payload.headers !== undefined) ?
-						action.payload.headers : stateCopy[action.payload.id].requests[action.payload.requestId].headers
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ?
-						action.payload.bodyType : stateCopy[action.payload.id].requests[action.payload.requestId].bodyType
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.textBody = ((action.payload.textBody !== null) && action.payload.textBody !== undefined) ?
-						action.payload.textBody : stateCopy[action.payload.id].requests[action.payload.requestId].textBody
-			stateCopy[action.payload.id]
-				.requests[action.payload.requestId]
-					.structuredBody = ((action.payload.structuredBody !== null) && action.payload.structuredBody !== undefined) ?
-						action.payload.structuredBody : stateCopy[action.payload.id].requests[action.payload.requestId].structuredBody
+			request = null
+			if (action.payload.folderId !== undefined && action.payload.folderId !== null) {
+				request = stateCopy[action.payload.id].requests[action.payload.folderId].requests[action.payload.requestId]
+			} else {
+				request = stateCopy[action.payload.id].requests[action.payload.requestId]
+			}
+
+			request.url = ((action.payload.url !== null) && action.payload.url !== undefined) ? action.payload.url : request.url
+			request.method = ((action.payload.method !== null) && action.payload.method !== undefined) ? action.payload.method : request.method
+			request.queries = ((action.payload.queries !== null) && action.payload.queries !== undefined) ? action.payload.queries : request.queries
+			request.headers = ((action.payload.headers !== null) && action.payload.headers !== undefined) ? action.payload.headers : request.headers
+			request.bodyType = ((action.payload.bodyType !== null) && action.payload.bodyType !== undefined) ? action.payload.bodyType : request.bodyType
+			request.textBody = ((action.payload.textBody !== null) && action.payload.textBody !== undefined) ? action.payload.textBody : request.textBody
+			request.structuredBody = ((action.payload.structuredBody !== null) && action.payload.structuredBody !== undefined) ? action.payload.structuredBody : request.structuredBody
+
+			if (action.payload.folderId !== undefined && action.payload.folderId !== null) {
+				stateCopy[action.payload.id].requests[action.payload.folderId].requests[action.payload.requestId] = request
+			} else {
+				stateCopy[action.payload.id].requests[action.payload.requestId] = request
+			}
+
 			return stateCopy;
 
 		case DELETE_REQUEST:
