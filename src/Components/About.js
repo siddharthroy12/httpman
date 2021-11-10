@@ -116,7 +116,7 @@ export default function About({ onClose }) {
 				<Head>
 					<AppIcon src={appIcon} />
 					<p>HTTPMAN</p>
-					<p>An open-source HTTP Client</p>
+					<p>A Simple and Stupid HTTP Client</p>
 					<Links>
 						<a href="https://twitter.com/Siddharth_Roy12" target="_blank" rel="noreferrer">Author</a>
 						<a href="https://github.com/siddharthroy12/httpman" target="_blank" rel="noreferrer">Source Code</a>
