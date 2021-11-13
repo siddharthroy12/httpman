@@ -35,7 +35,6 @@ const TabContainerSpace = styled.div`
 
 const BottomContainer = styled.div`
 	height: calc(100vh - 9rem);
-	overflow: scroll;
 
 	* {
 		transition-duration: 0s;
@@ -119,7 +118,7 @@ export default function BodyInput({id, requestId, folderId}) {
 	}
 
 	const updateTextBody = (value) => {
-	dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, value))
+		dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, value))
 	}
 	
 	return (

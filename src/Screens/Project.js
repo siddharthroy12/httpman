@@ -28,7 +28,7 @@ const Top = styled.div`
 
 const Sidebar = styled.div`
 	height: 100%;
-	width: 25rem;
+	width: 30rem;
 `
 
 const SidebarTop = styled(Top)`
@@ -119,7 +119,7 @@ const Center = styled.div`
 `
 
 const Result = styled.div`
-	width: 50rem;
+	width: 60rem;
 	height: 100%;
 `
 
@@ -229,6 +229,7 @@ export default function Project() {
 	const [filter, setFilter] = useState('')
 	let selectedItemState = null
 
+	console.log(response)
 	selectedItemState = selectedFolder !== null ? projectState.requests[selectedFolder].requests[selectedItem] :
 			selectedItem !== null ? projectState.requests[selectedItem] : null
 

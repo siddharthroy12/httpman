@@ -6,7 +6,6 @@ body {
 	padding: 0;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-
 	background-color: #222222;
 	color: #DDDDDD;
 }
@@ -19,7 +18,7 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-a { 
+a {
 	text-decoration: none;
   color: #ACA0F2;
 }
@@ -31,3 +30,8 @@ a {
 	box-sizing: border-box;
 	transition-duration: 0.2s;
 }
+
+.ace_editor * {
+	font-family: monospace !important;
+}
+

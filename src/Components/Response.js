@@ -1,4 +1,12 @@
 import { useState } from 'react'
+import { js as beautifyJs, html as beautifyHtml, css as beautifyCss } from 'js-beautify'
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-css";
+import "ace-builds/src-noconflict/mode-html";
+import "ace-builds/src-noconflict/theme-monokai";
+
 import styled from 'styled-components'
 
 const Tabs = styled.div`
@@ -24,7 +32,12 @@ const TabLeftSpace = styled.div`
 `
 
 const ResponseSection = styled.div`
+	height: calc(100vh - 9rem);
 	padding: 1rem;
+
+	* {
+		transition-duration: 0s;
+	}
 `
 
 const HeadersSection = styled.div`
@@ -44,7 +57,47 @@ const HeadersSection = styled.div`
 	}
 `
 
+const Editor = styled(AceEditor)`
+	width: 100% !important;
+	height: 100% !important;
+	font-size: 0.9rem !important;
+`
+
+function getFileType(response) {
+	const contentType = response.headers['content-type']
+
+	if (contentType.includes('json')) {
+		return 'json'
+	} else if (contentType.includes('javascript')) {
+		return 'javascript'
+	} else if (contentType.includes('html')) {
+		return 'html'
+	} else if (contentType.includes('css')) {
+		return  'css'
+	} else {
+		return 'xml'
+	}
+}
+
+function prettify(response) {
+	const responseString = getFileType(response) === 'json' ? JSON.stringify(response.data) : response.data
+	const config = { indent_size: 2, space_in_empty_paren: true }
+
+	if (getFileType(response) === 'json' || getFileType(response) === 'javascript') {
+		return beautifyJs(responseString, config)
+	} else if (getFileType(response) === 'html') {
+		return beautifyHtml(responseString, config)
+	} else if (getFileType(response) === 'css') {
+		return beautifyCss(responseString, config)
+	} else {
+		return responseString
+	}
+}
+
 export default function Response({ response }) {
+	const [responseString, setResponseString] = useState(
+		getFileType(response) === 'json' ? JSON.stringify(response.data) : response.data
+	)
 	const [selectedTab, setSelectedTab] = useState(1)
 
 	return (<>
@@ -55,7 +108,13 @@ export default function Response({ response }) {
 		</Tabs>
 		{selectedTab === 1 && (<>
 			<ResponseSection>
-				<p> {JSON.stringify(response.data)} </p>
+				<Editor
+						mode={getFileType(response)}
+						theme="monokai"
+						cursorStart={1}
+						readOnly
+						value={prettify(response)}
+					/>
 			</ResponseSection>
 		</>)}
 		{selectedTab ===2 && (

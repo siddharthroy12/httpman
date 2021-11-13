@@ -28,7 +28,7 @@ yarn start
 
 - [x] Add folders for requests
 - [ ] Add more body types (form, file, multipart form)
-- [ ] Add syntax highlighting for response
+- [x] Add syntax highlighting for response
 - [ ] Add JSON stytax checker
 - [ ] Add network error message
 
