@@ -30,7 +30,7 @@ yarn start
 - [ ] Add more body types (form, file, multipart form)
 - [x] Add syntax highlighting for response
 - [ ] Add JSON stytax checker
-- [ ] Add network error message
+- [x] Add network error message
 
 ## Author
 

@@ -194,6 +194,28 @@ const SendRequestBtn = styled.button`
 const RequestsContainer = styled.div`
 `
 
+const RequestCenter = styled.div`
+	display: flex;
+	height: calc(100vh - 7rem);
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	> .bi {
+		animation: rotation 1s infinite linear;
+		font-size: 2rem;
+	}
+
+	@keyframes rotation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
+	}
+	}
+`
+
 const StatusBlock = styled.p`
 	background-color: ${(props) => {
 		if (props.status < 200) { // 1xx status codes 
@@ -227,6 +249,8 @@ export default function Project() {
 	const [selectedItem, setSelectedItem] = useState(null)
 	const [selectedFolder, setSelectedFolder] = useState(null)
 	const [filter, setFilter] = useState('')
+	const [sendingRequest, setSendingRequest] = useState(false)
+	const [networkError, setNetworkError] = useState(false)
 	let selectedItemState = null
 
 	console.log(response)
@@ -255,6 +279,8 @@ export default function Project() {
 	}
 
 	const sendRequest = async () => {
+		setSendingRequest(true)
+		setNetworkError(false)
 		let res
 		let headers = {}
 		let body = {}
@@ -280,18 +306,22 @@ export default function Project() {
 				case 'GET':
 					res =	await axios.get(getFullUrl(selectedItemState), { headers })
 					setResponse(res)
+					setSendingRequest(false)
 					break;
 				case 'POST':
 					res = await axios.post(getFullUrl(selectedItemState), body, { headers })
 					setResponse(res)
+					setSendingRequest(false)
 					break;
 				case 'PUT':
 					res = await axios.put(getFullUrl(selectedItemState), body, { headers })
 					setResponse(res)
+					setSendingRequest(false)
 					break;
 				case 'DELETE':
 					res = await axios.delete(getFullUrl(selectedItemState))
 					setResponse(res)
+					setSendingRequest(false)
 					break;
 				default:
 					break;
@@ -299,8 +329,12 @@ export default function Project() {
 		} catch (error) {
 			if (error.response) {
 				setResponse(error.response)
+				setSendingRequest(false)
+			} else {
+				setSendingRequest(false)
+				setNetworkError(true)
 			}
-			console.log(error)
+			console.log({error})
 		}
 	}
 
@@ -479,6 +513,8 @@ export default function Project() {
 					</>)}
 				</Top>
 				<div>
+					{sendingRequest && <RequestCenter><i className="bi bi-arrow-repeat"></i></RequestCenter>}
+					{networkError && <RequestCenter><p>Network Error</p><p>(could be CORS)</p></RequestCenter>}
 					{response && (<>
 						<Response response={response} />
 				</>)}

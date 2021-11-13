@@ -14,6 +14,7 @@ const Tabs = styled.div`
 `
 
 const Tab = styled.div`
+	cursor: pointer;
 	display: flex;
 	justify-content: center;
 	align-items: center;
