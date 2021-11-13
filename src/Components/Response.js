@@ -96,9 +96,6 @@ function prettify(response) {
 }
 
 export default function Response({ response }) {
-	const [responseString, setResponseString] = useState(
-		getFileType(response) === 'json' ? JSON.stringify(response.data) : response.data
-	)
 	const [selectedTab, setSelectedTab] = useState(1)
 
 	return (<>
