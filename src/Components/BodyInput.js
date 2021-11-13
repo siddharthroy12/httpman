@@ -21,9 +21,17 @@ const Tab = styled.p`
 	padding: 0 1rem;
 	height: 2.5rem;
 	transition-duration: 0s !important;
-	border: ${(props) => props.selected ? props.theme.borderStyle : 'rgba(0,0,0,0)'};
-	border-top: none;
-	border-bottom: ${(props) => !props.selected ? props.theme.borderStyle : 'rgba(0,0,0,0)'};
+	border: 1px solid rgba(0, 0, 0, 0);
+	${(props) => props.selected ?
+			`
+				border-left: ${props.theme.borderStyle};
+				border-right: ${props.theme.borderStyle};
+			`:
+			`
+				border-bottom: ${props.theme.borderStyle};
+			`
+	}
+	z-index: 7;
 	cursor: pointer;
 `
 
@@ -35,6 +43,7 @@ const TabContainerSpace = styled.div`
 
 const BottomContainer = styled.div`
 	height: calc(100vh - 9rem);
+	position: relative;
 
 	* {
 		transition-duration: 0s;
@@ -49,6 +58,9 @@ const Editor = styled(AceEditor)`
 
 const TabSection = styled.div`
 	padding: 1rem;
+	padding-bottom: 4rem;
+	overflow: scroll;
+	height: 100%;
 `
 
 const Label = styled.p`
@@ -63,7 +75,7 @@ const UrlPreview = styled.div`
 	margin-bottom: 0.5rem;
 	overflow-x: auto;
 	white-space: nowrap;
-	width: calc(100vw - 42rem);
+	width: 100%;
 `
 
 const QueryList = styled.div`
@@ -78,7 +90,7 @@ const TabSectionBottom = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	position: sticky;
+	position: absolute;
 	bottom: 1rem;
 	right: 1rem;
 	width: 100%;

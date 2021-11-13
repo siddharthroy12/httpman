@@ -84,7 +84,7 @@ export const PinnedIcon = styled.p`
 
 export const DropdownMenu = styled.div`
 	position: absolute;
-	right: -10px;
+	right: 2px;
 	top: 2rem;
 	border: ${(props) => props.theme.borderStyle};
 	background-color: #2A2A2A;

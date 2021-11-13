@@ -28,7 +28,7 @@ const Top = styled.div`
 
 const Sidebar = styled.div`
 	height: 100%;
-	width: 30rem;
+	min-width: 15rem;
 `
 
 const SidebarTop = styled(Top)`
@@ -119,7 +119,7 @@ const Center = styled.div`
 `
 
 const Result = styled.div`
-	width: 60rem;
+	min-width: 30rem;
 	height: 100%;
 `
 

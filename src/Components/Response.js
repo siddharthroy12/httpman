@@ -21,9 +21,16 @@ const Tab = styled.div`
 	padding: 0 1rem;
 	height: 2.5rem;  
 	transition-duration: 0ms !important;
-	border-bottom: ${(props) => !props.selected ? props.theme.borderStyle : 'none'}; 
-	border-left: ${(props) => props.selected ? props.theme.borderStyle : 'none'};
-	border-right: ${(props) => props.selected ? props.theme.borderStyle : 'none'};
+	border: 1px solid rgba(0, 0, 0, 0);
+	${(props) => props.selected ?
+			`
+				border-left: ${props.theme.borderStyle};
+				border-right: ${props.theme.borderStyle};
+			`:
+			`
+				border-bottom: ${props.theme.borderStyle};
+			`
+	}
 `
 
 const TabLeftSpace = styled.div`

@@ -5,7 +5,7 @@ const Button = styled.button`
 	border-radius: 3px;
 	border-width: 2px;
 	padding: 0.5rem;
-	background-color: unset;
+	background-color: #222222;
 	color: #DDDDDD;
 
 	:hover {
