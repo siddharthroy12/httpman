@@ -31,7 +31,6 @@ const Tab = styled.p`
 				border-bottom: ${props.theme.borderStyle};
 			`
 	}
-	z-index: 7;
 	cursor: pointer;
 `
 

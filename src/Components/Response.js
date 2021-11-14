@@ -41,7 +41,6 @@ const TabLeftSpace = styled.div`
 
 const ResponseSection = styled.div`
 	height: calc(100vh - 9rem);
-	padding: 1rem;
 
 	* {
 		transition-duration: 0s;

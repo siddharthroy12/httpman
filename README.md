@@ -26,11 +26,8 @@ yarn start
 
 ## TODO
 
-- [x] Add folders for requests
 - [ ] Add more body types (form, file, multipart form)
-- [x] Add syntax highlighting for response
 - [ ] Add JSON stytax checker
-- [x] Add network error message
 
 ## Author
 
