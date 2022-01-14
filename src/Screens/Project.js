@@ -253,7 +253,6 @@ export default function Project() {
 	const [networkError, setNetworkError] = useState(false)
 	let selectedItemState = null
 
-	console.log(response)
 	selectedItemState = selectedFolder !== null ? projectState.requests[selectedFolder].requests[selectedItem] :
 			selectedItem !== null ? projectState.requests[selectedItem] : null
 

@@ -103,6 +103,7 @@ const Tabs = {
 
 export default function BodyInput({id, requestId, folderId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
+	const [bodyTypeSelectMenuShown, setBodyTypeSelectMenuShown] = useState(false)
 
 	const requestState = useSelector(state => {
 		if (folderId !== undefined && folderId !== null) {
@@ -137,6 +138,7 @@ export default function BodyInput({id, requestId, folderId}) {
 			<TabContainer>
 				<Tab selected={selectedTab === Tabs.BODY} onClick={() => setSelectedTab(Tabs.BODY)}>
 					Body
+					<i className="bi bi-caret-down-fill" style={{marginLeft:'10px'}}/>
 				</Tab>
 				<Tab selected={selectedTab === Tabs.QUERY} onClick={() => setSelectedTab(Tabs.QUERY)}>
 					Query

@@ -31,6 +31,20 @@ a {
 	transition-duration: 0.2s;
 }
 
+*::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+	background-color: none;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: blue;
+}
+
+*::-webkit-scrollbar-corner {
+	background: none;
+}
+
 .ace_editor * {
 	font-family: monospace !important;
 }
