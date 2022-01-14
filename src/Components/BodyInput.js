@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import AceEditor from "react-ace";
 import { useSelector, useDispatch } from 'react-redux'
 import { updateRequest } from '../Actions/ProjectActions'
@@ -13,7 +13,7 @@ const TabContainer = styled.div`
 	display: flex;
 `
 
-const Tab = styled.p`
+const Tab = styled.div`
 	font-size: 0.9rem;
 	display: flex;
 	align-items: center;
@@ -94,6 +94,29 @@ const TabSectionBottom = styled.div`
 	right: 1rem;
 	width: 100%;
 `
+const BodyTypeMenu = styled.div`
+	position: absolute;
+	border: ${(props) => props.theme.borderStyle};
+	background-color: #2A2A2A;
+	border-radius: 3px;
+	top: 40px;
+	left: 0px;
+	width: 13rem;
+	padding: 0.2rem 0;
+	z-index: 5;
+`
+const MenuItem = styled.button`
+	border: none;
+	background-color: unset;
+	color: white;
+	padding: 0.5rem 1rem;
+	width: 100%;
+	text-align: start;
+
+	:hover {
+		background-color: rgba(225,225,225, 0.1);
+	}
+`
 
 const Tabs = {
 	BODY: 1,
@@ -104,6 +127,7 @@ const Tabs = {
 export default function BodyInput({id, requestId, folderId}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
 	const [bodyTypeSelectMenuShown, setBodyTypeSelectMenuShown] = useState(false)
+	const bodyTypeMenuEl = useRef(null)
 
 	const requestState = useSelector(state => {
 		if (folderId !== undefined && folderId !== null) {
@@ -111,6 +135,19 @@ export default function BodyInput({id, requestId, folderId}) {
 		} else {
 			return state.project[id].requests[requestId]
 		}
+	})
+
+	const handleClickOutside = (event) => {
+		if (bodyTypeMenuEl.current && !bodyTypeMenuEl.current.contains(event.target)) {
+			setBodyTypeSelectMenuShown(false)
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('click', handleClickOutside, true);
+		return () => {
+			document.removeEventListener('click', handleClickOutside, true);
+		};
 	})
 
 	const dispatch = useDispatch()
@@ -136,9 +173,37 @@ export default function BodyInput({id, requestId, folderId}) {
 	return (
 		<div>
 			<TabContainer>
-				<Tab selected={selectedTab === Tabs.BODY} onClick={() => setSelectedTab(Tabs.BODY)}>
+				<Tab selected={selectedTab === Tabs.BODY} onClick={() => setSelectedTab(Tabs.BODY)} style={{position: 'relative'}}>
 					Body
-					<i className="bi bi-caret-down-fill" style={{marginLeft:'10px'}}/>
+					<i className="bi bi-caret-down-fill" style={{marginLeft:'10px'}} onClick={() => setBodyTypeSelectMenuShown(p => !p)}/>
+					{bodyTypeSelectMenuShown && (
+						<BodyTypeMenu ref={bodyTypeMenuEl}>
+							<MenuItem>
+								Multipart Form
+							</MenuItem>
+							<MenuItem>
+								Form URL Encoded
+							</MenuItem>
+							<MenuItem>
+								JSON
+							</MenuItem>
+							<MenuItem>
+								XML
+							</MenuItem>
+							<MenuItem>
+								YAML
+							</MenuItem>
+							<MenuItem>
+								EDN
+							</MenuItem>
+							<MenuItem>
+								Plain Text
+							</MenuItem>
+							<MenuItem>
+								Binary File
+							</MenuItem>
+						</BodyTypeMenu>
+					)}
 				</Tab>
 				<Tab selected={selectedTab === Tabs.QUERY} onClick={() => setSelectedTab(Tabs.QUERY)}>
 					Query
