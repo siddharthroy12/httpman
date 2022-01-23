@@ -297,7 +297,33 @@ export default function Project() {
 		})
 	
 		if (method === "POST" || method === "PUT") {
-			headers["content-type"] = "application/json"
+			let contentType = ''
+			switch(selectedItemState.bodyType) {
+				case "multipart":
+					contentType = "multipart/form-data"
+					break;
+				case "form":
+					contentType = "application/x-www-form-urlencoded"
+					break;
+				case "json":
+					contentType = "application/json"
+					break;
+				case "xml":
+					contentType = "application/xml"
+					break;
+				case "form":
+					contentType = "application/yaml"
+					break;
+				case "plain_text":
+					contentType = "text/plain"
+					break;
+				case "binary":
+					contentType = "application/octet-stream"
+					break;
+				default:
+					contentType = "text/plain"
+			}
+			headers["content-type"] = contentType
 		}
 	
 		try {

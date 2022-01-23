@@ -3,6 +3,9 @@ import AceEditor from "react-ace";
 import { useSelector, useDispatch } from 'react-redux'
 import { updateRequest } from '../Actions/ProjectActions'
 import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/mode-yaml";
+import "ace-builds/src-noconflict/mode-xml";
+import "ace-builds/src-noconflict/mode-plain_text";
 import "ace-builds/src-noconflict/theme-monokai";
 import styled from 'styled-components'
 import Button from './Button'
@@ -137,6 +140,11 @@ export default function BodyInput({id, requestId, folderId}) {
 		}
 	})
 
+	const setBodyType = (type) => {
+		setBodyTypeSelectMenuShown(false)
+		dispatch(updateRequest(id, requestId, folderId, null, null, null, null, type))
+	}
+
 	const handleClickOutside = (event) => {
 		if (bodyTypeMenuEl.current && !bodyTypeMenuEl.current.contains(event.target)) {
 			setBodyTypeSelectMenuShown(false)
@@ -149,6 +157,27 @@ export default function BodyInput({id, requestId, folderId}) {
 			document.removeEventListener('click', handleClickOutside, true);
 		};
 	})
+
+	const getBodyTypeName = (type) => {
+		switch (type) {
+			case "multipart":
+				return "Multipart Form"
+			case "form":
+				return "Form"
+			case "json":
+				return "JSON"
+			case "xml":
+				return "XML"
+			case "yaml":
+				return "YAML"
+			case "plain_text":
+				return "Plain Text"
+			case "binary":
+				return "Binary File"
+			default:
+				return "Body"
+		}
+	}
 
 	const dispatch = useDispatch()
 
@@ -174,32 +203,29 @@ export default function BodyInput({id, requestId, folderId}) {
 		<div>
 			<TabContainer>
 				<Tab selected={selectedTab === Tabs.BODY} onClick={() => setSelectedTab(Tabs.BODY)} style={{position: 'relative'}}>
-					Body
+					<p style={{width: "max-content"}}>{getBodyTypeName(requestState.bodyType)}</p>
 					<i className="bi bi-caret-down-fill" style={{marginLeft:'10px'}} onClick={() => setBodyTypeSelectMenuShown(p => !p)}/>
 					{bodyTypeSelectMenuShown && (
 						<BodyTypeMenu ref={bodyTypeMenuEl}>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("multipart")}>
 								Multipart Form
 							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("form")}>
 								Form URL Encoded
 							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("json")}>
 								JSON
 							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("xml")}>
 								XML
 							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("yaml")}>
 								YAML
 							</MenuItem>
-							<MenuItem>
-								EDN
-							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("plain_text")}>
 								Plain Text
 							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={() => setBodyType("binary")}>
 								Binary File
 							</MenuItem>
 						</BodyTypeMenu>
@@ -216,7 +242,7 @@ export default function BodyInput({id, requestId, folderId}) {
 			<BottomContainer>
 				{ selectedTab === Tabs.BODY && (
 					<Editor
-						mode="json"
+						mode={requestState.bodyType}
 						theme="monokai"
 						onChange={updateTextBody}
 						value={requestState.textBody}
