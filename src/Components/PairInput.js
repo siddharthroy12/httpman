@@ -31,7 +31,7 @@ const DeleteBtn = styled.button`
 	padding: 0;
 `
 
-export default function QueryInput({id, requestId, folderId, index, isQuery}) {
+export default function PairInput({id, requestId, folderId, index, isQuery}) {
 	const dispatch = useDispatch()
 
 	const requestState = useSelector(state => {
@@ -44,40 +44,48 @@ export default function QueryInput({id, requestId, folderId, index, isQuery}) {
 
 	const queries = requestState.queries
 	const headers = requestState.headers
-	const name = isQuery ? queries[index].name : headers[index].name
-	const value = isQuery ? queries[index].value : headers[index].value
+	const structuredBody = requestState.structuredBody
+	const name = isQuery === "query" ? queries[index].name : isQuery === "header" ? headers[index].name : structuredBody[index].name
+	const value = isQuery === "query" ? queries[index].value : isQuery === "header" ? headers[index].value : structuredBody[index].value
 
 	const updateName = (event) => {
-		let copy = isQuery ? [...queries] : [...headers]
+		let copy = isQuery === "query" ? [...queries] : isQuery === "header" ? [...headers] : [...structuredBody]
 		copy[index].name = event.target.value
 
-		if (isQuery) { 
+		if (isQuery === "query") {
 			dispatch(updateRequest(id, requestId, folderId, null, null, copy))
-		} else {
+		} else if (isQuery === "header") {
 			dispatch(updateRequest(id, requestId, folderId, null, null, null, copy))
+		} else {
+			dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, null, copy))
 		}
 	}
 
 	const updateValue = (event) => {
-		let copy = isQuery ? [...queries] : [...headers]
+		let copy = isQuery === "query" ? [...queries] : isQuery === "header" ? [...headers] : [...structuredBody]
+
 		copy[index].value = event.target.value
 
-		if (isQuery) { 
-			dispatch(updateRequest(id, requestId, folderId, null, null, copy))		
+		if (isQuery === "query") {
+			dispatch(updateRequest(id, requestId, folderId, null, null, copy))
+		} else if (isQuery === "header") {
+			dispatch(updateRequest(id, requestId, folderId, null, null, null, copy))
 		} else {
-			dispatch(updateRequest(id, requestId,folderId, null, null, null, copy))
+			dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, null, copy))
 		}
 	}
 
 	const deleteQuery = () => {
-		let copy = isQuery ? [...queries] : [...headers]
+		let copy = isQuery === "query" ? [...queries] : isQuery === "header" ? [...headers] : [...structuredBody]
 
 		copy = copy.filter((_, i) => i !== index)
 
-		if (isQuery) { 
-			dispatch(updateRequest(id, requestId, folderId, null, null, copy))		
-		} else {
+		if (isQuery === "query") {
+			dispatch(updateRequest(id, requestId, folderId, null, null, copy))
+		} else if (isQuery === "header") {
 			dispatch(updateRequest(id, requestId, folderId, null, null, null, copy))
+		} else {
+			dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, null, copy))
 		}
 	}
 

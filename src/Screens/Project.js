@@ -283,8 +283,13 @@ export default function Project() {
 		let res
 		let headers = {}
 		let body = {}
+
 		try {
-			body = JSON.parse(selectedItemState.textBody)
+			if (selectedItemState.bodyType === "multipart" || selectedItemState.bodyType === "form") {
+				body = selectedItemState.structuredBody
+			} else {
+				body = JSON.parse(selectedItemState.textBody)
+			}
 		} catch(e) {
 			body = {}
 		}
@@ -311,7 +316,7 @@ export default function Project() {
 				case "xml":
 					contentType = "application/xml"
 					break;
-				case "form":
+				case "yaml":
 					contentType = "application/yaml"
 					break;
 				case "plain_text":

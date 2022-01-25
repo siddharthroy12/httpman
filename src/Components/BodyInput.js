@@ -163,7 +163,7 @@ export default function BodyInput({id, requestId, folderId}) {
 			case "multipart":
 				return "Multipart Form"
 			case "form":
-				return "Form"
+				return "Form URL Encoded"
 			case "json":
 				return "JSON"
 			case "xml":
@@ -185,7 +185,14 @@ export default function BodyInput({id, requestId, folderId}) {
 		let updatedQueries = [...requestState.queries]
 		updatedQueries.push({ name: '', value: ''})
 
-		dispatch(updateRequest(id, requestId, folderId, null, null, updatedQueries)) 
+		dispatch(updateRequest(id, requestId, folderId, null, null, updatedQueries))
+	}
+
+	const addForm = () => {
+		let updatedForms = [...requestState.structuredBody]
+		updatedForms.push({ name: '', value: ''})
+
+		dispatch(updateRequest(id, requestId, folderId, null, null, null, null, null, null, updatedForms))
 	}
 
 	const addHeader = () => {
@@ -240,14 +247,25 @@ export default function BodyInput({id, requestId, folderId}) {
 				<TabContainerSpace />
 			</TabContainer>
 			<BottomContainer>
-				{ selectedTab === Tabs.BODY && (
+				{ selectedTab === Tabs.BODY && (<>
+					{requestState.bodyType === "form" || requestState.bodyType === "multipart" ? (
+						<TabSection>
+							{requestState.structuredBody.map((_, index) => {
+								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} isQuery="form" />
+							})}
+							<TabSectionBottom>
+								<Button onClick={() => addForm()}>Add</Button>
+							</TabSectionBottom>
+						</TabSection>
+					) : (
 					<Editor
 						mode={requestState.bodyType}
 						theme="monokai"
 						onChange={updateTextBody}
 						value={requestState.textBody}
-					/>
-				)}
+					/>)
+					}
+				</>)}
 				{ selectedTab === Tabs.QUERY && (
 					<TabSection>
 						<Label>URL PREVIEW</Label>
@@ -257,7 +275,7 @@ export default function BodyInput({id, requestId, folderId}) {
 						</UrlPreview>
 						<QueryList>
 							{requestState.queries.map((_, index) => {
-								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} isQuery />
+								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} isQuery="query" />
 							})}
 						</QueryList>
 					</TabSection>
@@ -271,7 +289,7 @@ export default function BodyInput({id, requestId, folderId}) {
 					<TabSection>
 						<HeaderList>
 							{requestState.headers.map((_, index) => {
-								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} />	
+								return <PairInput key={index} id={id} requestId={requestId} folderId={folderId} index={index} isQuery="header" />
 							})}
 						</HeaderList>
 					</TabSection>
@@ -281,6 +299,7 @@ export default function BodyInput({id, requestId, folderId}) {
 						<Button onClick={() => addHeader()}>Add</Button>
 					</TabSectionBottom>
 				)}
+				
 			</BottomContainer>
 		</div>
 	)

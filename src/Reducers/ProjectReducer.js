@@ -71,7 +71,7 @@ export const ProjectReducer = (state = {}, action) => {
 				url: '',
 				bodyType: 'plain_text',
 				textBody: '',
-				structuredBody: {},
+				structuredBody: [],
 				queries: [],
 				pinned: false,
 				headers: [],
