@@ -127,7 +127,7 @@ const Tabs = {
 	HEADER: 3
 }
 
-export default function BodyInput({id, requestId, folderId}) {
+export default function BodyInput({id, requestId, folderId, binaryFileHandler}) {
 	const [selectedTab, setSelectedTab] = useState(Tabs.BODY)
 	const [bodyTypeSelectMenuShown, setBodyTypeSelectMenuShown] = useState(false)
 	const bodyTypeMenuEl = useRef(null)
@@ -172,8 +172,6 @@ export default function BodyInput({id, requestId, folderId}) {
 				return "YAML"
 			case "plain_text":
 				return "Plain Text"
-			case "binary":
-				return "Binary File"
 			default:
 				return "Body"
 		}
@@ -232,9 +230,6 @@ export default function BodyInput({id, requestId, folderId}) {
 							<MenuItem onClick={() => setBodyType("plain_text")}>
 								Plain Text
 							</MenuItem>
-							<MenuItem onClick={() => setBodyType("binary")}>
-								Binary File
-							</MenuItem>
 						</BodyTypeMenu>
 					)}
 				</Tab>
@@ -257,6 +252,10 @@ export default function BodyInput({id, requestId, folderId}) {
 								<Button onClick={() => addForm()}>Add</Button>
 							</TabSectionBottom>
 						</TabSection>
+					) : requestState.bodyType === "binary" ? (
+						<>
+							<input type="file" label="Upload File" onChange={(event) => binaryFileHandler(event.target.files)}/>
+						</>
 					) : (
 					<Editor
 						mode={requestState.bodyType}

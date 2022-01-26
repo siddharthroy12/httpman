@@ -286,7 +286,11 @@ export default function Project() {
 
 		try {
 			if (selectedItemState.bodyType === "multipart" || selectedItemState.bodyType === "form") {
-				body = selectedItemState.structuredBody
+				let formData = new FormData()
+				selectedItem.structuredBody.forEach(part => {
+					formData.append(Object.keys(part)[0], Object.values(part)[0])
+				})
+				body = formData
 			} else {
 				body = JSON.parse(selectedItemState.textBody)
 			}
@@ -321,9 +325,6 @@ export default function Project() {
 					break;
 				case "plain_text":
 					contentType = "text/plain"
-					break;
-				case "binary":
-					contentType = "application/octet-stream"
 					break;
 				default:
 					contentType = "text/plain"
