@@ -26,7 +26,6 @@ yarn start
 
 ## TODO
 
-- [ ] Add more body types (form, file, multipart form)
 - [ ] Add JSON stytax checker
 
 ## Author
